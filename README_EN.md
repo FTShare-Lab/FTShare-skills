@@ -9,6 +9,8 @@
 
 This repository targets Agent runtimes such as Claude Code, Codex, and OpenClaw. Its goal is to package FTShare financial data capabilities and research workflows into Skills that Agents can understand, call, and reuse, helping Agents move from "calling data" toward "completing research tasks".
 
+For international developers, this repository can be understood as **FTShare Agent Skills for financial data, market data, and investment research workflows**, serving AI finance agents, MCP tools, and automated research scenarios.
+
 ## Repository Positioning
 
 `FTShare-skills` is not a single data-interface repository, and it is not the Python SDK.
@@ -100,8 +102,8 @@ Please note:
 
 - `FTShare-market-data` is a data-level Skill, not a full research report generator.
 - Business-level Skills are still under construction.
-- If you need to call data from Python code, use `ftshare-python-sdk`.
-- If you need a standard MCP tool entry point, use or wait for `ftshare-mcp`.
+- If you need to call data from Python code, use [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk).
+- If you need a standard MCP tool entry point, use [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP).
 - This repository focuses on Agent Skills, not traditional Python packages.
 
 ## Contributing
@@ -125,9 +127,9 @@ Chinese users are welcome to join the FTShare WeChat community group to discuss 
 
 ## Related Projects
 
-- [`ftshare-python-sdk`](https://github.com/ftshare-lab/ftshare-python-sdk): FTShare financial data Python SDK for developer-facing data access
-- `ftshare-mcp`: FTShare MCP tool layer for Agent tool calls
-- `FTShare-skills`: FTShare Agent Skills repository for data Skills and investment research workflow Skills
+- [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk): FTShare financial data Python SDK for developer-facing data access
+- [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP): FTShare financial data MCP tool documentation and integration guide for Agent tool calls
+- [FTShare-skills](https://github.com/FTShare-Lab/FTShare-skills): FTShare Agent Skills repository for data-level Skills and investment research workflow Skills
 
 ## License
 

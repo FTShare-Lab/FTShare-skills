@@ -5,9 +5,11 @@
 ![Python 3](https://img.shields.io/badge/python-3.x-blue)
 ![Status](https://img.shields.io/badge/status-early_stage-orange)
 
-`FTShare-skills` 是 ftshare 开源生态中的 Agent Skill 仓库，用于沉淀金融数据 Skill 和投研业务 Skill。
+`FTShare-skills` 是 FTShare 开源生态中的 Agent Skill 仓库，用于沉淀金融数据 Skill 和投研业务 Skill。
 
 本仓库面向 Claude Code、Codex、OpenClaw 等 Agent 运行时，目标是把 FTShare 的金融数据能力和投研业务流程封装成 Agent 可理解、可调用、可复用的 Skill，让 Agent 能从“调用数据”进一步走向“完成投研任务”。
+
+面向国际开发者，本仓库也可以被理解为 **FTShare Agent Skills for financial data, market data and investment research workflows**，服务于 AI finance agents、MCP tools 和自动化投研场景。
 
 ## 仓库定位
 
@@ -100,8 +102,8 @@ FTShare-market-data/README.md
 
 - `FTShare-market-data` 是数据级 Skill，不是完整研报生成器。
 - 当前业务级 Skill 仍在建设中。
-- 如果需要 Python 编程调用数据，应使用 `ftshare-python-sdk`。
-- 如果需要标准 MCP 工具入口，应使用或等待 `ftshare-mcp`。
+- 如果需要 Python 编程调用数据，应使用 [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk)。
+- 如果需要标准 MCP 工具入口，应使用 [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP)。
 - 本仓库重点是 Agent Skill，而不是传统 Python 包。
 
 ## Contributing
@@ -125,9 +127,9 @@ FTShare-market-data/README.md
 
 ## Related Projects
 
-- [`ftshare-python-sdk`](https://github.com/ftshare-lab/ftshare-python-sdk)：FTShare 金融数据 Python SDK，面向开发者编程调用
-- `ftshare-mcp`：FTShare MCP 工具层，面向 Agent 工具调用
-- `FTShare-skills`：FTShare Agent Skill 仓库，面向数据 Skill 与投研业务 Skill
+- [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk)：FTShare 金融数据 Python SDK，面向开发者编程调用
+- [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP)：FTShare 金融数据 MCP 工具文档与接入说明，面向 Agent 工具调用
+- [FTShare-skills](https://github.com/FTShare-Lab/FTShare-skills)：FTShare Agent Skill 仓库，面向数据级 Skill 与投研业务 Skill
 
 ## License
 
