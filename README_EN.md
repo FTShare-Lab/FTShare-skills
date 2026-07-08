@@ -114,7 +114,7 @@ Before contributing, read [CONTRIBUTING.md](CONTRIBUTING.md), which covers Skill
 
 Chinese users are welcome to join the FTShare WeChat community group to discuss Skill usage, data-level Skills, business-level Skills, Agent-based investment research workflows, and contribution directions.
 
-<img src="docs/assets/wechat-group.png" alt="FTShare WeChat community group" width="320" />
+<img src="docs/assets/wechat-group-20260715.png" alt="FTShare WeChat community group" width="320" />
 
 > **Community rules**:
 > - Discussions should be related to FTShare, Skill building, financial data interfaces, or Agent research workflows

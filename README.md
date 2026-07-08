@@ -114,7 +114,7 @@ FTShare-market-data/README.md
 
 欢迎加入 FTShare 社区交流群，一起讨论 Skill 使用、数据级 Skill、业务级 Skill、Agent 投研工作流和项目贡献方向。
 
-<img src="docs/assets/wechat-group.png" alt="FTShare 微信交流群" width="320" />
+<img src="docs/assets/wechat-group-20260715.png" alt="FTShare 微信交流群" width="320" />
 
 > **群规说明**：
 > - 仅限 FTShare 项目、Skill 构建、金融数据接口、Agent 投研工作流相关讨论
