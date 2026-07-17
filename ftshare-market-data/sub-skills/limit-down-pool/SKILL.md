@@ -1,29 +1,31 @@
 ---
 name: limit-down-pool
-description: Get today's limit-down stock pool (当日跌停股池). Use when user asks about 跌停、跌停板、跌停股、今日跌停.
+description: Get the limit-down stock pool for today or a historical trade date (当日或指定历史交易日的跌停股池). Use when user asks about 跌停、跌停板、跌停股、今日跌停、当天跌停、某日跌停.
 ---
 
-# 当日跌停股池
+# 跌停股池
 
 ## 1. 接口描述
 
 | 项目 | 说明 |
 |------|------|
-| 接口名称 | 查询当日跌停股池 |
+| 接口名称 | 查询跌停股池 |
 | 外部接口 | `GET /api/v1/market/data/limit-down-pool` |
 | 请求方式 | GET |
-| 适用场景 | 查询当前交易日正在跌停的 A 股股票列表（`limit_down_enter` 非空的股票），包含封板时间、翘板次数、封单资金等字段 |
+| 适用场景 | 不传 `trade_date`（或传当日）时返回当日实时跌停股池；传历史交易日时返回该交易日曾跌停的股票（`limit_down_enter` 非空），包含封板时间、翘板次数、封单资金等字段，并已过滤非股票标的（可转债等） |
 
 ## 2. 请求参数
 
-无参数，返回当日全量跌停股池。
+| 参数名 | 类型 | 是否必填 | 描述 | 取值示例 | 备注 |
+|--------|------|----------|------|----------|------|
+| trade_date | string | 否 | 交易日期，YYYYMMDD | 20260713 | 不传或传当日时查询实时数据 |
 
 ## 3. 响应说明
 
 返回 `LimitDownPoolItemResponse` 数组：
 
 | 字段名 | 类型 | 可为空 | 说明 |
-|--------|------|--------|------|
+|--------|--------|--------|------|
 | symbol | string | 否 | 标的代码（如 000001.XSHE） |
 | trade_date | string | 否 | 交易日期 YYYYMMDD |
 | ready | bool | 否 | 当日涨跌停价格是否已就绪 |
@@ -56,7 +58,10 @@ description: Get today's limit-down stock pool (当日跌停股池). Use when us
 ## 4. 用法
 
 ```bash
+# 当日实时跌停股池
 python <RUN_PY> limit-down-pool
+# 指定历史交易日
+python <RUN_PY> limit-down-pool --trade-date 20260713
 ```
 
 ## 5. 注意事项
@@ -65,4 +70,6 @@ python <RUN_PY> limit-down-pool
 - `limit_down_enter` 数组中的第一个元素为首次跌停时间，`last_limit_down_time` 为最后一次封板时间
 - `limit_down_break_count` 为 0 表示一字跌停（从未被翘开）
 - `limit_down_seal_value` 封单资金：跌停时累加卖一跌停价挂单额，非跌停状态时为 0
+- 非交易时段调用且未传 `trade_date` 时返回空数组或上一交易日数据
+- 传入 `trade_date` 时返回该交易日的已落库跌停股池，不再受实时内存状态限制
 - 展示时可用 `stock-security-info`（`https://ftai.chat`）查股票名称，symbol 需转换：`.XSHG`→`.SH`，`.XSHE`→`.SZ`

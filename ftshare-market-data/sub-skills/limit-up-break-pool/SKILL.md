@@ -1,22 +1,24 @@
 ---
 name: limit-up-break-pool
-description: Get today's limit-up break stock pool (当日炸板股池). Use when user asks about 炸板、涨停炸板、打开涨停、炸板股.
+description: Get the limit-up break stock pool for today or a historical trade date (当日或指定历史交易日的炸板股池). Use when user asks about 炸板、涨停炸板、打开涨停、炸板股、今日炸板、当日炸板、某日炸板.
 ---
 
-# 当日炸板股池
+# 炸板股池
 
 ## 1. 接口描述
 
 | 项目 | 说明 |
 |------|------|
-| 接口名称 | 查询当日炸板股池 |
+| 接口名称 | 查询炸板股池 |
 | 外部接口 | `GET /api/v1/market/data/limit-up-break-pool` |
 | 请求方式 | GET |
-| 适用场景 | 查询当前交易日涨停过且炸板过的 A 股股票列表（`limit_up_enter` 且 `limit_up_break` 均非空） |
+| 适用场景 | 不传 `trade_date`（或传当日）时返回当日实时炸板股池；传历史交易日时返回该交易日曾涨停且炸板的股票（`limit_up_enter` 且 `limit_up_break` 均非空），并已过滤非股票标的（可转债等） |
 
 ## 2. 请求参数
 
-无参数，返回当日全量炸板股池。
+| 参数名 | 类型 | 是否必填 | 描述 | 取值示例 | 备注 |
+|--------|------|----------|------|----------|------|
+| trade_date | string | 否 | 交易日期，YYYYMMDD | 20260713 | 不传或传当日时查询实时数据 |
 
 ## 3. 响应说明
 
@@ -54,7 +56,10 @@ description: Get today's limit-up break stock pool (当日炸板股池). Use whe
 ## 4. 用法
 
 ```bash
+# 当日实时炸板股池
 python <RUN_PY> limit-up-break-pool
+# 指定历史交易日
+python <RUN_PY> limit-up-break-pool --trade-date 20260713
 ```
 
 ## 5. 注意事项
@@ -62,4 +67,6 @@ python <RUN_PY> limit-up-break-pool
 - 仅返回 `limit_up_enter` 和 `limit_up_break` 均非空的股票
 - 炸板后 `status` 通常为 `normal`（已不再涨停），但若反复封板也可能为 `limit_up`
 - `limit_up_break` 数组中的每个时间对应一次炸板，长度等于 `limit_up_break_count`
+- 非交易时段调用且未传 `trade_date` 时返回空数组或上一交易日数据
+- 传入 `trade_date` 时返回该交易日的已落库炸板股池，不再受实时内存状态限制
 - 展示时可用 `stock-security-info`（`https://ftai.chat`）查股票名称，symbol 需转换：`.XSHG`→`.SH`，`.XSHE`→`.SZ`

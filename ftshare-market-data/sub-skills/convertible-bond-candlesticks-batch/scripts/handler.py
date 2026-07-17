@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+"""批量查询多只可转债 K 线（POST /api/v1/market/data/convertible-bond-candlesticks/batch）"""
+import argparse
+import json
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+import os
+
+SAFE_URLOPENER = urllib.request.build_opener()
+
+BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+ENDPOINT = "/api/v1/market/data/convertible-bond-candlesticks/batch"
+
+INTERVAL_UNITS = ("Minute", "Day", "Week", "Month", "Year")
+ADJUST_KINDS = ("None", "Forward", "Backward")
+
+
+def safe_urlopen(req_or_url):
+    if isinstance(req_or_url, urllib.request.Request):
+        url = req_or_url.full_url
+    else:
+        url = str(req_or_url)
+    parsed = urllib.parse.urlparse(url)
+    base_parsed = urllib.parse.urlparse(BASE_URL)
+    if parsed.scheme != base_parsed.scheme or parsed.netloc != base_parsed.netloc:
+        print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
+        sys.exit(1)
+    return SAFE_URLOPENER.open(req_or_url)
+
+
+HEADERS = {
+    "X-Client-Name": "ft-claw",
+    "Content-Type": "application/json",
+}
+
+
+def parse_symbols(raw):
+    syms = [s.strip() for s in raw.split(",") if s.strip()]
+    if not syms:
+        print("--symbols 不能为空", file=sys.stderr)
+        sys.exit(1)
+    return syms
+
+
+def build_body(symbols, interval_unit, interval_value, adjust_kind,
+               since_ts_millis, until_ts_millis, limit):
+    body = {
+        "symbols": symbols,
+        "interval_unit": interval_unit,
+        "until_ts_millis": until_ts_millis,
+    }
+    if interval_value is not None and interval_value != 1:
+        body["interval_value"] = interval_value
+    if adjust_kind and adjust_kind != "None":
+        body["adjust_kind"] = adjust_kind
+    if since_ts_millis is not None:
+        body["since_ts_millis"] = since_ts_millis
+    if limit is not None:
+        body["limit"] = limit
+    return body
+
+
+def fetch(symbols, interval_unit, interval_value, adjust_kind,
+          since_ts_millis, until_ts_millis, limit):
+    body = build_body(symbols, interval_unit, interval_value, adjust_kind,
+                      since_ts_millis, until_ts_millis, limit)
+    url = BASE_URL + ENDPOINT
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        headers=HEADERS,
+        method="POST",
+    )
+    try:
+        with safe_urlopen(req) as resp:
+            return json.loads(resp.read().decode())
+    except urllib.error.HTTPError as e:
+        msg = e.read().decode()
+        print(f"HTTP {e.code}: {msg}", file=sys.stderr)
+        sys.exit(1)
+    except urllib.error.URLError as e:
+        print(f"Request failed: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="批量查询多只可转债 K 线（POST + JSON body）")
+    parser.add_argument("--symbols", required=True,
+                        help="可转债代码列表，逗号分隔，如 113027.SH,123001.SZ")
+    parser.add_argument("--interval-unit", dest="interval_unit", required=True,
+                        choices=INTERVAL_UNITS, help="K 线周期：Minute/Day/Week/Month/Year")
+    parser.add_argument("--interval-value", dest="interval_value", type=int, default=1,
+                        help="间隔数值，默认 1（Minute+5 表示 5 分钟 K）")
+    parser.add_argument("--adjust-kind", dest="adjust_kind", default="None",
+                        choices=ADJUST_KINDS, help="复权：None（默认）/Forward/Backward")
+    parser.add_argument("--since-ts-millis", dest="since_ts_millis", type=int, default=None,
+                        help="开始时间戳（毫秒）；分钟 K 与 until 跨度 ≤3 天")
+    parser.add_argument("--until-ts-millis", dest="until_ts_millis", required=True, type=int,
+                        help="结束时间戳（毫秒）")
+    parser.add_argument("--limit", type=int, default=None, help="每个标的返回条数上限")
+    args = parser.parse_args()
+
+    symbols = parse_symbols(args.symbols)
+    data = fetch(symbols, args.interval_unit, args.interval_value,
+                 args.adjust_kind, args.since_ts_millis, args.until_ts_millis, args.limit)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()
