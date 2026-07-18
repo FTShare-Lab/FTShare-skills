@@ -1,67 +1,65 @@
 #!/usr/bin/env python3
-"""按日期范围查询财经日历（market.ft.tech）"""
+"""查询百度财经日历。"""
 import argparse
 import json
+import os
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-import os
 
 SAFE_URLOPENER = urllib.request.build_opener()
-
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+ENDPOINT = "/api/v1/market/data/finance/financial-calendar/baidu"
 
 
 def safe_urlopen(req_or_url):
-    if isinstance(req_or_url, urllib.request.Request):
-        url = req_or_url.full_url
-    else:
-        url = str(req_or_url)
+    url = req_or_url.full_url if isinstance(req_or_url, urllib.request.Request) else str(req_or_url)
     parsed = urllib.parse.urlparse(url)
-    if parsed.scheme != urllib.parse.urlparse(BASE_URL).scheme or parsed.netloc != urllib.parse.urlparse(BASE_URL).netloc:
+    base = urllib.parse.urlparse(BASE_URL)
+    if parsed.scheme != base.scheme or parsed.netloc != base.netloc:
         print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
         sys.exit(1)
     return SAFE_URLOPENER.open(req_or_url)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="按日期范围查询财经日历")
+    parser = argparse.ArgumentParser(description="查询百度财经日历")
+    parser.add_argument("--start-date", required=True, help="开始日期，格式 YYYY-MM-DD")
+    parser.add_argument("--end-date", required=True, help="结束日期，格式 YYYY-MM-DD")
     parser.add_argument(
-        "--start-date",
-        type=str,
-        required=True,
-        help="开始日期，格式 YYYY-MM-DD",
+        "--category",
+        choices=("economic", "ipo", "report_time", "trade_reminder"),
+        default=None,
+        help="可选事件分类",
     )
-    parser.add_argument(
-        "--end-date",
-        type=str,
-        required=True,
-        help="结束日期，格式 YYYY-MM-DD",
-    )
+    parser.add_argument("--page", type=int, default=1, help="页码，从 1 开始")
+    parser.add_argument("--page-size", dest="page_size", type=int, default=50, help="每页条数，最大 200")
     args = parser.parse_args()
 
-    url = (
-        BASE_URL
-        + "/api/v1/market/data/finance/financial-calendar?"
-        + urllib.parse.urlencode({"start_date": args.start_date, "end_date": args.end_date})
-    )
-    req = urllib.request.Request(url, method="GET")
+    params = {
+        "start_date": args.start_date,
+        "end_date": args.end_date,
+        "category": args.category,
+        "page": args.page,
+        "page_size": args.page_size,
+    }
+    query = urllib.parse.urlencode({key: value for key, value in params.items() if value is not None})
+    request = urllib.request.Request(f"{BASE_URL}{ENDPOINT}?{query}", method="GET")
 
     try:
-        with safe_urlopen(req) as resp:
-            chunks = []
-            while True:
-                chunk = resp.read(65536)
-                if not chunk:
-                    break
-                chunks.append(chunk)
-            raw = b"".join(chunks).decode()
-        data = json.loads(raw)
-        print(json.dumps(data, ensure_ascii=False, indent=2))
-    except urllib.error.HTTPError as e:
-        body = e.read().decode()
-        print(body, file=sys.stderr)
+        with safe_urlopen(request) as response:
+            payload = json.loads(response.read().decode())
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    except urllib.error.HTTPError as error:
+        body = error.read().decode().strip()
+        message = f"HTTP {error.code}"
+        if body:
+            message += f": {body}"
+        print(message, file=sys.stderr)
+        sys.exit(1)
+    except urllib.error.URLError as error:
+        print(f"请求失败: {error.reason}", file=sys.stderr)
         sys.exit(1)
 
 
