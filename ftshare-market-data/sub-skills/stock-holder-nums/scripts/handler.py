@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""查询单只 A 股股票所有公告期的股东人数信息"""
+"""查询 A 股股东人数。
+
+两种模式：
+1) 指定 stock_code：返回该标的全部历史股东人数记录（不分页）。
+2) is_last=true：返回所有标的最新一期股东人数（分页）。
+"""
 import argparse
 import json
 import sys
@@ -25,8 +30,21 @@ def safe_urlopen(req_or_url):
 ENDPOINT = "/api/v1/market/data/holder/stock-holder-nums"
 
 
-def fetch(stock_code: str) -> dict:
-    params = urllib.parse.urlencode({"stock_code": stock_code})
+def build_params(stock_code, is_last, page, page_size):
+    params = {}
+    if stock_code:
+        params["stock_code"] = stock_code
+    if is_last:
+        params["is_last"] = "true"
+    if page is not None:
+        params["page"] = page
+    if page_size is not None:
+        params["page_size"] = page_size
+    return params
+
+
+def fetch(stock_code, is_last, page, page_size):
+    params = urllib.parse.urlencode(build_params(stock_code, is_last, page, page_size))
     url = f"{BASE_URL}{ENDPOINT}?{params}"
     try:
         with safe_urlopen(url) as resp:
@@ -38,15 +56,24 @@ def fetch(stock_code: str) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="查询单只 A 股股票所有公告期的股东人数信息")
+    parser = argparse.ArgumentParser(description="查询 A 股股东人数")
     parser.add_argument(
         "--stock_code",
-        required=True,
-        help="股票代码，需携带市场后缀，如 603323.SH / 000001.SZ / 833171.BJ",
+        help="股票代码，需携带市场后缀，如 603323.SH / 000001.SZ / 833171.BJ；不传时需配合 --is_last",
     )
+    parser.add_argument(
+        "--is_last",
+        action="store_true",
+        help="返回所有标的最新一期股东人数（分页）",
+    )
+    parser.add_argument("--page", type=int, help="页码，从 1 开始（默认 1）")
+    parser.add_argument("--page_size", type=int, help="每页记录数（默认 50）")
     args = parser.parse_args()
 
-    result = fetch(args.stock_code)
+    if not args.stock_code and not args.is_last:
+        parser.error("需指定 --stock_code 或 --is_last 至少其一")
+
+    result = fetch(args.stock_code, args.is_last, args.page, args.page_size)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

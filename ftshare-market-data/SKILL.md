@@ -183,6 +183,21 @@ FTSHARE_BASE_URL=http://127.0.0.1:8000/ python <RUN_PY> stock-intraday-prices --
 - **`fund-nav-single-fund-paginated`**：查询指定基金净值历史（分页）。必填：`--institution-code`；可选：`--page`、`--page-size`。建议先完成名称到代码映射后再调用。
 - **`fund-overview-all-funds-paginated`**：查询所有基金概览信息（分页）。可选：`--page`、`--page-size`。
 - **`fund-support-symbols-all-funds-paginated`**：查询所有支持基金的标的列表（分页）。可选：`--page`、`--page-size`。
+- **`fund-share-single-fund-paginated`**：按基金代码分页查询基金份额变动。必填：`--fund_code`；可选：`--stati_perd`（日/季度/年度/截止时点/半年/全部）、`--start_date`/`--end_date`（YYYYMMDD）、`--page`、`--page_size`。
+- **`fund-company-list-paginated`**：分页查询基金公司列表及名下基金数量。可选：`--fund_company`（精确匹配）、`--page`、`--page_size`。
+- **`fund-net-value-performance-single-fund`**：按基金代码查净值收益表现。必填：`--fund_code`；可选：`--stat_date` 或 `--start_date`+`--end_date`（互斥）、`--page`、`--page_size`。
+- **`fund-net-value-detail-single-fund`**：按基金代码查净值明细。必填：`--fund_code`；可选：`--nav_date` 或 `--start_date`+`--end_date`（互斥）、`--page`、`--page_size`。
+- **`fund-classification-single-fund`**：查询基金在多套分类标准下的分类。必填：`--fund_code`；可选：`--classify_std`（证监会/晨星/银河/Gangtise 等）。
+- **`fund-list-paginated`**：分页查询公募基金基础列表。可选：`--fund_code`（精确查单只）、`--fund_type`、`--page`、`--page_size`。
+- **`fund-portfolio-single-fund-paginated`**：按基金代码查报告期持仓明细。必填：`--fund_code`；可选：`--report_date` 或 `--start_date`+`--end_date`（互斥）、`--publish_date`、`--page`、`--page_size`。
+- **`fund-holder-structure-single-fund`**：查询基金持有人结构。必填：`--fund_code`；可选：`--report_type`、`--start_date`/`--end_date`。直接返回数组（非分页）。
+- **`fund-new-found-paginated`**：查询新发基金。可选：`--start_date`/`--end_date`（成立日范围，不传默认近 1 年）、`--fund_type`、`--page`、`--page_size`。
+- **`fund-manager-relationship`**：按基金代码或基金经理姓名查询任职关系。`--fund_code` 与 `--fund_manager` 二选一；可选：`--is_inoffice`（1 在任 / 0 离任）、`--page`、`--page_size`。
+- **`fund-daily-paginated`**：按基金代码查场内基金行情日线。必填：`--fund_code`；可选：`--trade_date` 或 `--start_date`+`--end_date`（互斥）、`--page`、`--page_size`。
+- **`fund-fee-single-fund-paginated`**：查询基金费率。必填：`--fund_code`；可选：`--charge_type`、`--client_type`、`--page`、`--page_size`。
+- **`fund-asset-allocation-single-fund-paginated`**：按基金代码查报告期资产配置。必填：`--fund_code`；可选：`--report_date` 或 `--start_date`+`--end_date`（互斥）、`--publish_date`、`--page`、`--page_size`。
+- **`fund-risk-level-single-fund`**：查询基金风险等级。必填：`--fund_code`；可选：`--history`（返回全部变更历史）。直接返回数组（非分页）。
+- **`fund-index-tracking-funds`**：按指数代码查询跟踪该指数的基金。必填：`--index_code`；可选：`--scope`（all 全市场默认 / etf 仅场内 ETF）。直接返回数组（非分页）。
 
 ### 4. 港股
 
@@ -513,7 +528,15 @@ python <RUN_PY> stock-share-chg --stock_code 603323.SH
 
 ### 6. 股东增减持
 
-- **`stock-share-chg`**：查询单只 A 股股票所有报告期的股东增减持信息，含变动股东名称、变动类型（增持/减持）、变动数量、变动前后持股数量、最新股价及涨跌幅、变动日期区间、公告日期等。必填参数：`--stock_code`（如 `603323.SH`）；可选参数：`--page`、`--page_size`，返回值含分页信息。
+- **`stock-share-chg`**：查询 A 股股东增减持明细，两种模式：指定 `--stock_code` 分页查询该标的全部历史，或 `--is_last` 返回所有标的最新一期（分页）。必填其一：`--stock_code` 或 `--is_last`；可选 `--page`、`--page_size`。含变动股东名称、变动类型（增持/减持）、变动数量、变动前后持股数量、最新股价及涨跌幅、变动日期区间、公告日期等。
+
+### 7. 股本
+
+- **`stock-share`**：获取单票指定日期股本信息。必填：`--stock_code`（如 `000001.SZ`）、`--date`（YYYYMMDD）；返回总股本、A 股流通/限售/无限售股本、B 股/H 股/境外上市股本等。
+
+### 8. 实时行情筛选
+
+- **`stock-filter`**：A 股实时行情筛选。传入 `--symbol` 时按单标的查询（忽略 board 与 listing_date_since）；否则按 `--board`（star/chi_next/bjse/xshg/xshe/main）+ `--listing_date_since`（YYYYMMDD）筛选。可选 `--page`、`--page_size`。返回扁平分页结构（无信封）。
 
 ---
 
@@ -550,6 +573,27 @@ python <RUN_PY> stock-share-chg --stock_code 603323.SH
 || 「603323.SH 的股东增减持情况如何？」 | `stock-share-chg` |
 || 「某股票最近有哪些股东在减持？」 | `stock-share-chg` |
 || 「某股东对某股票的持股变动历史」 | `stock-share-chg` |
+|| 「全市场最新一期股东增减持」 | `stock-share-chg`（`--is_last`） |
+|| 「某股票某日股本是多少？」 | `stock-share` |
+|| 「000001.SZ 在 20260716 的总股本与流通股本」 | `stock-share` |
+|| 「科创板实时行情筛选」 | `stock-filter`（`--board star`） |
+|| 「600519 实时行情」 | `stock-filter`（`--symbol 600519.SH`） |
+|| 「2024 年之后上市的创业板股票」 | `stock-filter`（`--board chi_next --listing_date_since 20240101`） |
+|| 「某基金的份额变动」 | `fund-share-single-fund-paginated` |
+|| 「基金公司名下有多少只基金」 | `fund-company-list-paginated` |
+|| 「某基金本周/本月/今年收益率」 | `fund-net-value-performance-single-fund` |
+|| 「某基金单位净值与累计净值」 | `fund-net-value-detail-single-fund` |
+|| 「某基金按晨星/证监会分类」 | `fund-classification-single-fund` |
+|| 「股票型/混合型基金列表」 | `fund-list-paginated`（`--fund_type 股票型`） |
+|| 「某基金报告期持仓明细」 | `fund-portfolio-single-fund-paginated` |
+|| 「某基金持有人结构」 | `fund-holder-structure-single-fund` |
+|| 「近期新发基金」 | `fund-new-found-paginated` |
+|| 「某基金经理管理过哪些基金」 | `fund-manager-relationship` |
+|| 「ETF/LOF 日线行情」 | `fund-daily-paginated` |
+|| 「某基金申购/赎回/管理费率」 | `fund-fee-single-fund-paginated` |
+|| 「某基金股票/债券资产配置」 | `fund-asset-allocation-single-fund-paginated` |
+|| 「某基金风险等级」 | `fund-risk-level-single-fund` |
+|| 「跟踪沪深 300 的基金有哪些」 | `fund-index-tracking-funds`（`--index_code 000300`） |
 
 # FT A-share 业绩大全 Skills
 

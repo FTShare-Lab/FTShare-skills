@@ -52,5 +52,7 @@ python <RUN_PY> convertible-bond-candlesticks-batch --symbols 113027.SH,113028.S
 - `symbols` 用逗号分隔；任一非可转债标的当前外部接口返回系统错误，不静默过滤。
 - 响应中的 `symbol` 会规范化为长市场后缀（`.XSHG`/`.XSHE`）。
 - 分钟 K 线（`interval_unit=Minute`）的 `since/until` 跨度硬限制 ≤3 天。
+- `interval_value` 仅在 `interval_unit=Minute` 时生效：不传或传 1 为 1 分钟 K，传 5/15/30/60/120 为对应多分钟 K；其他周期忽略该字段。
+- 多分钟 K 按北京时间的每个交易日分别聚合，不跨交易日；以 5 分钟 K 为例，首根为 09:30—09:35，开高低收取区间首根开盘价、最高价、最低价、末根收盘价，成交量和成交额按区间求和。
 - 默认不复权（None），`Forward` 前复权、`Backward` 后复权。
 - 价格字段 JSON 中为字符串以避免精度丢失。
