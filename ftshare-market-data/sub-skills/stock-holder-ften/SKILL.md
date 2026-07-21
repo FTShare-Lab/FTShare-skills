@@ -1,24 +1,27 @@
 ---
 name: stock-holder-ften
-description: "查询单票所有公告期 10 大流通股东。当用户需要获取 A 股上市公司单只股票所有公告期的十大流通股东信息，支持沪深京股票，或了解单票所有公告期 10 大流通股东时使用。"
+description: "查询 A 股十大流通股东。当用户需要获取 A 股十大流通股东信息（按 stock_code 查全部历史，或以 is_last=true 查全市场最新一期），支持沪深京股票，或了解单票/全市场十大流通股东时使用。"
 ---
 
-# 查询单票所有公告期 10 大流通股东
+# 查询 A 股十大流通股东
 
 ## 接口说明
 
-| 项目     | 说明                                                                 |
-|----------|----------------------------------------------------------------------|
-| 接口名称 | 查询单票所有公告期 10 大流通股东                                     |
-| 外部接口 | `/api/v1/market/data/holder/stock-holder-ften`                  |
-| 请求方式 | GET                                                                  |
-| 适用场景 | 获取 A 股上市公司单只股票所有公告期的十大流通股东信息，支持沪深京股票 |
+| 项目     | 说明                                                              |
+|----------|-------------------------------------------------------------------|
+| 接口名称 | 查询 A 股十大流通股东                                              |
+| 外部接口 | `/api/v1/market/data/holder/stock-holder-ften`                |
+| 请求方式 | GET                                                                |
+| 适用场景 | 指定 stock_code 查全部历史十大流通股东，或 is_last=true 查全市场最新一期 |
 
 ## 请求参数
 
-| 参数名     | 类型   | 是否必填 | 描述         | 取值示例  | 备注                                                                                       |
-|------------|--------|----------|--------------|-----------|--------------------------------------------------------------------------------------------|
-| stock_code | string | 是       | 单个股票代码 | 603323.SH | 支持沪深京股票，A 股需为 6 位数字+后缀（SH=上交所，SZ=深交所，BJ=北交所），单次仅支持一个代码 |
+| 参数名     | 类型   | 是否必填 | 描述            | 取值示例  | 备注                                                                                       |
+|------------|--------|----------|-----------------|-----------|--------------------------------------------------------------------------------------------|
+| stock_code | string | 否       | 单个股票代码    | 603323.SH | 不传时需配合 `--is_last`；支持沪深京 A 股，需 6 位数字+后缀（SH/SZ/BJ），单次仅支持一个代码 |
+| is_last    | flag   | 否       | 取所有标的最新一期 | （flag）  | 传字符串 `"true"`；与 `stock_code` 二选一                                                    |
+| page       | int    | 否       | 页码            | 1         | 默认 1，仅 `is_last=true` 模式下生效                                                        |
+| page_size  | int    | 否       | 每页记录数      | 50        | 默认 50                                                                                     |
 
 ## 执行方式
 
@@ -27,9 +30,12 @@ description: "查询单票所有公告期 10 大流通股东。当用户需要�
 ```bash
 # 查询 603323.SH 所有公告期十大流通股东
 python <RUN_PY> stock-holder-ften --stock_code 603323.SH
+
+# 查询全市场最新一期（分页）
+python <RUN_PY> stock-holder-ften --is_last --page 1 --page_size 50
 ```
 
-> `<RUN_PY>` 为主 `SKILL.md` 同级的 `run.py` 绝对路径，参见主 SKILL.md 的「调用方式」说明。
+> `<RUN_PY>` 为主 `SKILL.md` 同级的 `run.py` 绝对路径。
 
 ## 响应结构
 
@@ -39,7 +45,7 @@ python <RUN_PY> stock-holder-ften --stock_code 603323.SH
         {
             "stock_code": "603323.SH",
             "stock_name": "苏农银行",
-            "publish_date": "2024-09-30",
+            "publish_date": "2026-03-31",
             "share_holding": 23.15,
             "fen_holders": [
                 {
@@ -71,43 +77,26 @@ python <RUN_PY> stock-holder-ften --stock_code 603323.SH
 | total_pages | int   | 否         | 总页数                           |
 | total_items | int   | 否         | 总记录数                         |
 
-### TopTenHolders 字段说明
+### fen_holders 数组元素字段
 
-| 字段名        | 类型   | 是否可为空 | 说明                                       | 单位 |
-|---------------|--------|------------|--------------------------------------------|------|
-| stock_code    | String | 否         | 股票交易代码，固定携带 .SZ/.SH/.BJ 市场后缀 | -    |
-| stock_name    | String | 否         | 上市公司对应股票名称                       | -    |
-| publish_date  | String | 否         | 公告截止日期，固定格式为 YYYY-MM-DD         | -    |
-| share_holding | float  | 否         | 十大流通股东持股合计（占股本比例总和）       | %    |
-| fen_holders   | Array  | 否         | 十大流通股东明细列表                       | -    |
-
-### HolderDetail 字段说明（fen_holders 数组元素）
-
-| 字段名            | 类型   | 是否可为空 | 说明                                       | 单位 |
-|-------------------|--------|------------|--------------------------------------------|------|
-| rank              | int    | 否         | 股东名次                                   | -    |
-| shareholder_name  | String | 否         | 股东名称                                   | -    |
-| shareholder_type  | String | 否         | 股东性质                                   | -    |
-| share_type        | String | 否         | 股份类型，固定为"A股"                       | -    |
-| shareholding      | float  | 否         | 持股数                                     | 股   |
-| share_ratio       | float  | 否         | 占股本持股比例                             | %    |
-| limit_num         | float  | 是         | 限售数量                                   | 股   |
-| unlimit_num       | float  | 是         | 无限售数量，流通股东此字段固定为 null        | 股   |
-| change_shares     | float  | 否         | 增减股数（与上期对比）                       | 股   |
-| change_type       | String | 是         | 变动类型：新进、增持、减持、不变              | -    |
-| change_percentage | float  | 是         | 变动比例（与上期对比），无上期数据时返回 null | %    |
-
-### 变动类型说明
-
-- **新进**：上期不存在该股东
-- **增持**：本期持股数大于上期
-- **减持**：本期持股数小于上期
-- **不变**：本期持股数等于上期
+| 字段名            | 类型   | 是否可为空 | 说明                                       |
+|-------------------|--------|------------|--------------------------------------------|
+| rank              | int    | 否         | 股东名次                                   |
+| shareholder_name  | String | 否         | 股东名称                                   |
+| shareholder_type  | String | 否         | 股东性质                                   |
+| share_type        | String | 否         | 股份类型，固定为"A股"                       |
+| shareholding      | string | 否         | 持股数（股）                                |
+| share_ratio       | string | 否         | 占股本持股比例（%）                          |
+| limit_num         | string | 是         | 流通限售数量                                |
+| unlimit_num       | string | 是         | 流通无限售数量                              |
+| change_shares     | string | 否         | 增减（股）                                  |
+| change_type       | String | 是         | 变动类型                                    |
+| change_percentage | string | 是         | 变动比例（%）                                |
 
 ## 注意事项
 
-- `stock_code` 为必填项，单次仅支持一个股票代码
-- 股票代码需携带市场后缀（`.SH` / `.SZ` / `.BJ`）
-- `unlimit_num` 对流通股东固定返回 `null`
-- `limit_num`、`change_type`、`change_percentage` 可能为 `null`，展示时需做空值处理
-- 该接口返回该股票所有历史公告期数据，通常 `total_pages` 为 1
+- 必须至少指定 `--stock_code` 或 `--is_last` 其一，否则报错。
+- 指定 `--stock_code` 时返回该标的全部历史，通常 `total_pages` 为 1。
+- `--is_last` 模式按 `page`/`page_size` 分页返回全市场最新一期。
+- `is_last` 在 query string 中传字符串 `"true"`，否则部分客户端反序列化会 400。
+- `fen_holders` 中 `limit_num`/`unlimit_num` 等字段可能为空，展示时需做空值处理。

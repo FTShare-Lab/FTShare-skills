@@ -32,6 +32,8 @@ python <RUN_PY> semantic-search-news --query 人工智能
 python <RUN_PY> semantic-search-news --query 人工智能 --limit 10 --year 2026 --start_time 2026-03-01T00:00:00+08:00 --end_time 2026-03-15T23:59:59+08:00
 python <RUN_PY> cb-lists
 python <RUN_PY> cb-base-data --symbol_code 110070.SH
+python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> convertible-bond-candlesticks-batch --symbols 113027.SH,123001.SZ --interval-unit Day --until-ts-millis 1756791000000 --limit 2
 python <RUN_PY> etf-pcfs --date 20260309
 python <RUN_PY> etf-pcf-download --filename pcf_159003_20260309.xml --output pcf.xml
 python <RUN_PY> fund-basicinfo-single-fund --institution-code 000001
@@ -167,6 +169,8 @@ FTSHARE_BASE_URL=http://127.0.0.1:8000/ python <RUN_PY> stock-intraday-prices --
 - **`semantic-search-news`**：语义搜索新闻，数据仅支持当年、最近半个月。必填：`--query`；可选 `--limit`、`--year`。展示时需含来源（source_site）与文章链接，并提示数据仅半个月内。
 - **`cb-lists`**：可转债全量列表，无参数，数据为前一交易日。
 - **`cb-base-data`**：单只可转债基础信息（转股价、转股价值、到期日等）。必填：`--symbol_code`（如 110070.SH）。若用户仅给名称，先通过 `cb-lists` 映射代码再查。
+- **`convertible-bond-candlesticks`**：查询单只可转债分/日/周/月/年 K 线（POST + JSON body，毫秒时间戳）。必填：`--symbol`、`--interval-unit`、`--until-ts-millis`；可选 `--interval-value`、`--adjust-kind`、`--since-ts-millis`、`--limit`。仅接受可转债标的。
+- **`convertible-bond-candlesticks-batch`**：批量查询多只可转债 K 线，响应为 `[[symbol, K线数组], ...]`。必填：`--symbols`（逗号分隔）、`--interval-unit`、`--until-ts-millis`；其余参数同单只。任一非可转债标的整体返回系统错误。
 - **`etf-pcfs`**：指定日期 ETF PCF 列表。必填：`--date`（YYYYMMDD）；可选 `--page`、`--page_size`。
 - **`etf-pcf-download`**：按文件名下载 PCF XML。必填：`--filename`；可选：`--output`（仅允许当前工作目录下路径）。**filename 须先由 `etf-pcfs` 列表接口取得**，勿在自动化测试中硬编码。
 - **`etf-component`**：查询单只 ETF 成份股列表（代码与名称）。必填：`--symbol`（如 510300.XSHG）；接口报错或未找到时将接口返回的错误信息原样输出到 stderr。
@@ -179,6 +183,21 @@ FTSHARE_BASE_URL=http://127.0.0.1:8000/ python <RUN_PY> stock-intraday-prices --
 - **`fund-nav-single-fund-paginated`**：查询指定基金净值历史（分页）。必填：`--institution-code`；可选：`--page`、`--page-size`。建议先完成名称到代码映射后再调用。
 - **`fund-overview-all-funds-paginated`**：查询所有基金概览信息（分页）。可选：`--page`、`--page-size`。
 - **`fund-support-symbols-all-funds-paginated`**：查询所有支持基金的标的列表（分页）。可选：`--page`、`--page-size`。
+- **`fund-share-single-fund-paginated`**：按基金代码分页查询基金份额变动。必填：`--fund_code`；可选：`--stati_perd`（日/季度/年度/截止时点/半年/全部）、`--start_date`/`--end_date`（YYYYMMDD）、`--page`、`--page_size`。
+- **`fund-company-list-paginated`**：分页查询基金公司列表及名下基金数量。可选：`--fund_company`（精确匹配）、`--page`、`--page_size`。
+- **`fund-net-value-performance-single-fund`**：按基金代码查净值收益表现。必填：`--fund_code`；可选：`--stat_date` 或 `--start_date`+`--end_date`（互斥）、`--page`、`--page_size`。
+- **`fund-net-value-detail-single-fund`**：按基金代码查净值明细。必填：`--fund_code`；可选：`--nav_date` 或 `--start_date`+`--end_date`（互斥）、`--page`、`--page_size`。
+- **`fund-classification-single-fund`**：查询基金在多套分类标准下的分类。必填：`--fund_code`；可选：`--classify_std`（证监会/晨星/银河/Gangtise 等）。
+- **`fund-list-paginated`**：分页查询公募基金基础列表。可选：`--fund_code`（精确查单只）、`--fund_type`、`--page`、`--page_size`。
+- **`fund-portfolio-single-fund-paginated`**：按基金代码查报告期持仓明细。必填：`--fund_code`；可选：`--report_date` 或 `--start_date`+`--end_date`（互斥）、`--publish_date`、`--page`、`--page_size`。
+- **`fund-holder-structure-single-fund`**：查询基金持有人结构。必填：`--fund_code`；可选：`--report_type`、`--start_date`/`--end_date`。直接返回数组（非分页）。
+- **`fund-new-found-paginated`**：查询新发基金。可选：`--start_date`/`--end_date`（成立日范围，不传默认近 1 年）、`--fund_type`、`--page`、`--page_size`。
+- **`fund-manager-relationship`**：按基金代码或基金经理姓名查询任职关系。`--fund_code` 与 `--fund_manager` 二选一；可选：`--is_inoffice`（1 在任 / 0 离任）、`--page`、`--page_size`。
+- **`fund-daily-paginated`**：按基金代码查场内基金行情日线。必填：`--fund_code`；可选：`--trade_date` 或 `--start_date`+`--end_date`（互斥）、`--page`、`--page_size`。
+- **`fund-fee-single-fund-paginated`**：查询基金费率。必填：`--fund_code`；可选：`--charge_type`、`--client_type`、`--page`、`--page_size`。
+- **`fund-asset-allocation-single-fund-paginated`**：按基金代码查报告期资产配置。必填：`--fund_code`；可选：`--report_date` 或 `--start_date`+`--end_date`（互斥）、`--publish_date`、`--page`、`--page_size`。
+- **`fund-risk-level-single-fund`**：查询基金风险等级。必填：`--fund_code`；可选：`--history`（返回全部变更历史）。直接返回数组（非分页）。
+- **`fund-index-tracking-funds`**：按指数代码查询跟踪该指数的基金。必填：`--index_code`；可选：`--scope`（all 全市场默认 / etf 仅场内 ETF）。直接返回数组（非分页）。
 
 ### 4. 港股
 
@@ -313,6 +332,8 @@ FTSHARE_BASE_URL=http://127.0.0.1:8000/ python <RUN_PY> stock-intraday-prices --
 | 「语义搜索新闻」「按关键词搜新闻」 | `semantic-search-news` |
 | 「可转债列表」「全部可转债」「转债代码列表」 | `cb-lists` |
 | 「某只可转债详情」「转股价/转股价值/到期日」 | `cb-base-data` |
+| 「某只可转债的 K 线、日 K/周 K/月 K/年 K、分钟级 K 线」 | `convertible-bond-candlesticks` |
+| 「多只可转债的 K 线、批量可转债日 K」 | `convertible-bond-candlesticks-batch` |
 | 「ETF PCF 列表」「申购赎回清单」「指定日期 PCF」 | `etf-pcfs` |
 | 「下载 PCF 文件」「PCF XML 内容」 | `etf-pcf-download` |
 | 「前 N 个交易日」「近 N 天交易日」「往前推 N 个交易日」（查近几天 K 线时先调再转时间戳） | `get-nth-trade-date` |
@@ -507,7 +528,15 @@ python <RUN_PY> stock-share-chg --stock_code 603323.SH
 
 ### 6. 股东增减持
 
-- **`stock-share-chg`**：查询单只 A 股股票所有报告期的股东增减持信息，含变动股东名称、变动类型（增持/减持）、变动数量、变动前后持股数量、最新股价及涨跌幅、变动日期区间、公告日期等。必填参数：`--stock_code`（如 `603323.SH`）；可选参数：`--page`、`--page_size`，返回值含分页信息。
+- **`stock-share-chg`**：查询 A 股股东增减持明细，两种模式：指定 `--stock_code` 分页查询该标的全部历史，或 `--is_last` 返回所有标的最新一期（分页）。必填其一：`--stock_code` 或 `--is_last`；可选 `--page`、`--page_size`。含变动股东名称、变动类型（增持/减持）、变动数量、变动前后持股数量、最新股价及涨跌幅、变动日期区间、公告日期等。
+
+### 7. 股本
+
+- **`stock-share`**：获取单票指定日期股本信息。必填：`--stock_code`（如 `000001.SZ`）、`--date`（YYYYMMDD）；返回总股本、A 股流通/限售/无限售股本、B 股/H 股/境外上市股本等。
+
+### 8. 实时行情筛选
+
+- **`stock-filter`**：A 股实时行情筛选。传入 `--symbol` 时按单标的查询（忽略 board 与 listing_date_since）；否则按 `--board`（star/chi_next/bjse/xshg/xshe/main）+ `--listing_date_since`（YYYYMMDD）筛选。可选 `--page`、`--page_size`。返回扁平分页结构（无信封）。
 
 ---
 
@@ -544,6 +573,27 @@ python <RUN_PY> stock-share-chg --stock_code 603323.SH
 || 「603323.SH 的股东增减持情况如何？」 | `stock-share-chg` |
 || 「某股票最近有哪些股东在减持？」 | `stock-share-chg` |
 || 「某股东对某股票的持股变动历史」 | `stock-share-chg` |
+|| 「全市场最新一期股东增减持」 | `stock-share-chg`（`--is_last`） |
+|| 「某股票某日股本是多少？」 | `stock-share` |
+|| 「000001.SZ 在 20260716 的总股本与流通股本」 | `stock-share` |
+|| 「科创板实时行情筛选」 | `stock-filter`（`--board star`） |
+|| 「600519 实时行情」 | `stock-filter`（`--symbol 600519.SH`） |
+|| 「2024 年之后上市的创业板股票」 | `stock-filter`（`--board chi_next --listing_date_since 20240101`） |
+|| 「某基金的份额变动」 | `fund-share-single-fund-paginated` |
+|| 「基金公司名下有多少只基金」 | `fund-company-list-paginated` |
+|| 「某基金本周/本月/今年收益率」 | `fund-net-value-performance-single-fund` |
+|| 「某基金单位净值与累计净值」 | `fund-net-value-detail-single-fund` |
+|| 「某基金按晨星/证监会分类」 | `fund-classification-single-fund` |
+|| 「股票型/混合型基金列表」 | `fund-list-paginated`（`--fund_type 股票型`） |
+|| 「某基金报告期持仓明细」 | `fund-portfolio-single-fund-paginated` |
+|| 「某基金持有人结构」 | `fund-holder-structure-single-fund` |
+|| 「近期新发基金」 | `fund-new-found-paginated` |
+|| 「某基金经理管理过哪些基金」 | `fund-manager-relationship` |
+|| 「ETF/LOF 日线行情」 | `fund-daily-paginated` |
+|| 「某基金申购/赎回/管理费率」 | `fund-fee-single-fund-paginated` |
+|| 「某基金股票/债券资产配置」 | `fund-asset-allocation-single-fund-paginated` |
+|| 「某基金风险等级」 | `fund-risk-level-single-fund` |
+|| 「跟踪沪深 300 的基金有哪些」 | `fund-index-tracking-funds`（`--index_code 000300`） |
 
 # FT A-share 业绩大全 Skills
 
@@ -655,6 +705,8 @@ python <RUN_PY> etf-description-all
 python <RUN_PY> etf-list-paginated --order_by "change_rate desc" --page_size 20 --page_no 1
 python <RUN_PY> etf-ohlcs --etf 510050.XSHG --since 20240101 --until 20240131
 python <RUN_PY> etf-prices --etf 510050.XSHG --since TODAY
+python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> etf-candlesticks-batch --symbols 510300.XSHG,159915.XSHE --interval-unit Day --until-ts-millis 1756791000000 --limit 2
 ```
 
 > `run.py` 内部通过 `__file__` 自定位，无论安装在何处都能正确找到各子 skill 的脚本。
@@ -670,6 +722,8 @@ python <RUN_PY> etf-prices --etf 510050.XSHG --since TODAY
 | **ETF 列表**、**全市场 ETF**、**按涨跌幅排序的 ETF**、**筛选某类 ETF** | `etf-list-paginated` |
 | 某只 ETF 的 **K 线**、**510050 日线/周线/月线**、ETF **开高低收**、**前/后复权** | `etf-ohlcs` |
 | 某只 ETF **分时**、**510050 当日分时**、ETF **一分钟行情**、**多日分时走势** | `etf-prices` |
+| 某只 ETF **5 分钟 K / 日 K / 周 K / 月 K / 年 K**、ETF **分钟级 K 线**、毫秒时间戳 K 线 | `etf-candlesticks` |
+| **多只 ETF 的 K 线**、**批量 ETF 日 K/周 K**、510300 与 159915 一起拉 K 线 | `etf-candlesticks-batch` |
 
 ---
 
@@ -680,6 +734,8 @@ python <RUN_PY> etf-prices --etf 510050.XSHG --since TODAY
 - **`etf-list-paginated`**：ETF 分页列表，支持分页、排序、筛选。可选：`--order_by`/`--ob`、`--filter`、`--masks`、`--page_size`、`--page_no`、`--filter_index`。
 - **`etf-ohlcs`**：查询单只 ETF OHLC K 线（开高低收、成交量、成交额，daec 日期区间）。必填：`--etf`、`--since`（YYYYMMDD）；可选 `--until`（YYYYMMDD，默认今天）、`--interval`（Day/Week/Month，默认 Day）、`--adjust`（Forward/Backward）。无年线、无 MA。
 - **`etf-prices`**：查询单只 ETF 分钟级分时价格。必填：`--etf`；时间范围二选一：`--since`（TODAY、FIVE_DAYS_AGO、TRADE_DAYS_AGO(n)）或 `--since_ts_ms`。
+- **`etf-candlesticks`**：查询单只 ETF 分/日/周/月/年 K 线（POST + JSON body，毫秒时间戳，支持分钟级与年 K）。必填：`--symbol`、`--interval-unit`、`--until-ts-millis`；可选 `--interval-value`、`--adjust-kind`、`--since-ts-millis`、`--limit`。仅接受 ETF 标的。
+- **`etf-candlesticks-batch`**：批量查询多只 ETF K 线，响应为 `[[symbol, K线数组], ...]`。必填：`--symbols`（逗号分隔）、`--interval-unit`、`--until-ts-millis`；其余参数同单只。任一非 ETF 标的整体返回系统错误。
 
 ---
 
@@ -721,6 +777,8 @@ python <RUN_PY> index-detail --index 000001.XSHG
 python <RUN_PY> index-list-paginated --order_by "change_rate desc" --page_size 20 --page_no 1
 python <RUN_PY> index-ohlcs --index 000001.XSHG --since 20240101 --until 20240131
 python <RUN_PY> index-prices --index 000001.XSHG --since TODAY
+python <RUN_PY> index-candlesticks --symbol 000300.XSHG --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> index-candlesticks-batch --symbols 000300.XSHG,399001.XSHE --interval-unit Day --until-ts-millis 1756791000000 --limit 2
 python <RUN_PY> get-nth-trade-date --n 5
 ```
 
@@ -742,6 +800,8 @@ python <RUN_PY> get-nth-trade-date --n 5
 | **指数列表**、**全市场指数**、**按涨跌幅排序的指数**、**筛选某类指数** | `index-list-paginated` |
 | 某只指数的 **K 线**、**上证指数日线/周线/月线**、指数 **开高低收**、**前/后复权** | `index-ohlcs` |
 | 某只指数 **分时**、**上证指数当日分时**、指数 **一分钟行情**、**多日分时走势** | `index-prices` |
+| 某只指数 **5 分钟 K / 日 K / 周 K / 月 K / 年 K**、指数 **分钟级 K 线**、毫秒时间戳 K 线 | `index-candlesticks` |
+| **多只指数的 K 线**、**批量指数日 K/周 K**、沪深300 与深证成指一起拉 K 线 | `index-candlesticks-batch` |
 | **前 N 个交易日**、**近 N 天交易日**、**往前推 N 个交易日**（查近几天 K 线时先调此接口再转时间戳） | `get-nth-trade-date` |
 
 ---
@@ -759,6 +819,8 @@ python <RUN_PY> get-nth-trade-date --n 5
 - **`index-list-paginated`**：指数分页列表，支持分页、排序、筛选。可选：`--order_by`/`--ob`、`--filter`、`--masks`、`--page_size`、`--page_no`。
 - **`index-ohlcs`**：查询单只指数 OHLC K 线（开高低收、成交量、成交额，daec 日期区间）。必填：`--index`、`--since`（YYYYMMDD）；可选 `--until`（YYYYMMDD，默认今天）、`--interval`（Day/Week/Month，默认 Day）、`--adjust`（Forward/Backward）。无年线、无 MA。建议先完成名称到代码映射后再调用。
 - **`index-prices`**：查询单只指数分钟级分时价格。必填：`--index`；时间范围二选一：`--since`（TODAY、FIVE_DAYS_AGO、TRADE_DAYS_AGO(n)）或 `--since_ts_ms`。建议先完成名称到代码映射后再调用。
+- **`index-candlesticks`**：查询单只指数分/日/周/月/年 K 线（POST + JSON body，毫秒时间戳，返回点位数据）。必填：`--symbol`、`--interval-unit`、`--until-ts-millis`；可选 `--interval-value`、`--adjust-kind`、`--since-ts-millis`、`--limit`。仅接受指数标的。
+- **`index-candlesticks-batch`**：批量查询多只指数 K 线，响应为 `[[symbol, K线数组], ...]`。必填：`--symbols`（逗号分隔）、`--interval-unit`、`--until-ts-millis`；其余参数同单只。任一非指数标的整体返回系统错误。
 
 ---
 
@@ -830,6 +892,8 @@ python <RUN_PY> stock-ohlcs --symbol 688295.XSHG --since 20240101 --until 202401
 python <RUN_PY> stock-ohlcs --symbol 000001.SZ --since 20240101 --until 20260628 --interval Week
 python <RUN_PY> stock-ohlcs --symbol 600000.XSHG --compat v2 --span DAY1 --limit 5
 python <RUN_PY> stock-prices --stock 000001.XSHG --since TODAY
+python <RUN_PY> stock-candlesticks --symbol 600519.SH --interval-unit Day --since-ts-millis 1756431000000 --until-ts-millis 1756710000000 --limit 5
+python <RUN_PY> stock-candlesticks-batch --symbols 600519.SH,000001.SZ --interval-unit Day --until-ts-millis 1756791000000 --limit 2
 ```
 
 > `run.py` 内部通过 `__file__` 自定位，无论安装在何处都能正确找到各子 skill 的脚本。
@@ -845,6 +909,11 @@ python <RUN_PY> stock-prices --stock 000001.XSHG --since TODAY
 ### 2. 单只股票分时价格（一分钟级别）
 
 - **`stock-prices`**：查询单只 A 股股票在指定时间范围内的分时数据（一分钟一根），用于分时图、当日/多日走势；含该分钟价格、成交量、成交额、均价、时间戳。必填参数：`--stock`；时间起点二选一：`--since`（TODAY / FIVE_DAYS_AGO / TRADE_DAYS_AGO(n)）或 `--since_ts_ms`（毫秒时间戳）。
+
+### 3. 通用 candlesticks K 线（POST + JSON body）
+
+- **`stock-candlesticks`**：查询单只标的分/日/周/月/年 K 线（POST + JSON body，毫秒时间戳，统一 candlesticks 契约，支持股票/ETF/可转债/指数）。必填：`--symbol`、`--interval-unit`、`--until-ts-millis`；可选 `--interval-value`、`--adjust-kind`、`--since-ts-millis`、`--limit`。分钟 K 与 until 跨度 ≤3 天。
+- **`stock-candlesticks-batch`**：批量查询多只标的 K 线，响应为 `[[symbol, K线数组], ...]`，可混合股票/ETF/可转债/指数。必填：`--symbols`（逗号分隔）、`--interval-unit`、`--until-ts-millis`；其余参数同单只。
 
 ---
 
@@ -874,6 +943,8 @@ python <RUN_PY> stock-prices --stock 000001.XSHG --since TODAY
 | 「某股票分钟级分时、分时图数据」 | `stock-prices` |
 | 「某股票从五日前起的分时」 | `stock-prices` |
 | 「某股票从 N 个交易日前起的走势」 | `stock-prices` |
+| 「某股票 5 分钟 K 线 / 年 K 线 / 毫秒时间戳 K 线」 | `stock-candlesticks` |
+| 「多只股票/ETF/可转债/指数的批量 K 线」 | `stock-candlesticks-batch` |
 
 # FT 宏观经济数据 Skills（中国 + 美国）
 

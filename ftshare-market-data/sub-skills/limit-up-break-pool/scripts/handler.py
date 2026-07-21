@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""查询当日炸板股池（market.ft.tech）"""
+"""查询炸板股池（market.ft.tech）"""
+import argparse
 import json
+import re
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 import os
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+
+TRADE_DATE_RE = re.compile(r"^\d{8}$")
 
 
 def _is_a_share(symbol):
@@ -24,7 +29,25 @@ def _is_a_share(symbol):
 
 
 def main():
-    url = f"{BASE_URL}/api/v1/market/data/limit-up-break-pool"
+    parser = argparse.ArgumentParser(description="查询炸板股池")
+    parser.add_argument(
+        "--trade-date",
+        dest="trade_date",
+        default=None,
+        help="交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据",
+    )
+    args = parser.parse_args()
+
+    params = {}
+    if args.trade_date is not None and args.trade_date.strip():
+        td = args.trade_date.strip()
+        if not TRADE_DATE_RE.match(td):
+            print(f"--trade-date 需为 YYYYMMDD：{args.trade_date}", file=sys.stderr)
+            sys.exit(1)
+        params["trade_date"] = td
+
+    query = ("?" + urllib.parse.urlencode(params)) if params else ""
+    url = f"{BASE_URL}/api/v1/market/data/limit-up-break-pool{query}"
     req = urllib.request.Request(url, method="GET")
     req.add_header("Accept", "application/json")
 
