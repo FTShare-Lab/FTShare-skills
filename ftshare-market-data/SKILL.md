@@ -534,6 +534,18 @@ python <RUN_PY> stock-share-chg --stock_code 603323.SH
 
 - **`stock-share`**：获取单票指定日期股本信息。必填：`--stock_code`（如 `000001.SZ`）、`--date`（YYYYMMDD）；返回总股本、A 股流通/限售/无限售股本、B 股/H 股/境外上市股本等。
 
+### 7.1 A 股代码与状态变更 / 曾用名
+
+- **`stk-code-change`**：查询某只 A 股股票的代码变更历史，返回每个代码的起止使用区间。必填：`--trade_code`（带 .SZ/.SH/.BJ 后缀，支持逗号分隔多个）；可选 `--start_date`、`--end_date`（YYYYMMDD）。不分页，按 `trade_code` 返回全部记录。
+- **`stk-status-change`**：查询 A 股状态变更记录（上市、退市、暂停上市等）。三个可选过滤参数：`--trade_code`、`--change_date`、`--change_type`，可任意组合亦可全部不填。不分页，按 `trade_code` 升序、`change_date` 降序返回。
+- **`namechange`**：查询某只 A 股股票的历史曾用名及使用区间。必填：`--trade_code`（带 .SZ/.SH 后缀，支持逗号分隔多个）；可选 `--start_date`、`--end_date`（YYYYMMDD）。不分页，单只股票一次性返回全部历史名称记录。
+
+### 7.2 上市公司管理层
+
+- **`stk-managers`**：查询上市公司管理层人员信息（姓名、岗位类别、职位、任职区间等）。必填：`--trade_code`（带 .SZ/.SH 后缀，支持逗号分隔多个）；可选 `--candi_date`（YYYYMMDD 精确匹配）、`--begin_date`、`--end_date`（YYYYMMDD 区间过滤）。不分页。
+- **`stk-manager-hold`**：查询上市公司管理层人员持股变动明细。必填：`--trade_code`（带 .SZ/.SH 后缀，支持逗号分隔多个）；可选 `--end_date`（YYYYMMDD 精确匹配）。不分页。
+- **`stk-manager-pay`**：查询上市公司管理层人员年度薪酬。必填：`--trade_code`（带 .SZ/.SH 后缀，支持逗号分隔多个）；可选 `--end_date`（YYYYMMDD 精确匹配）。不分页。`pay` 为高精度数值，序列化为字符串。
+
 ### 8. 实时行情筛选
 
 - **`stock-filter`**：A 股实时行情筛选。传入 `--symbol` 时按单标的查询（忽略 board 与 listing_date_since）；否则按 `--board`（star/chi_next/bjse/xshg/xshe/main）+ `--listing_date_since`（YYYYMMDD）筛选。可选 `--page`、`--page_size`。返回扁平分页结构（无信封）。
@@ -576,6 +588,13 @@ python <RUN_PY> stock-share-chg --stock_code 603323.SH
 || 「全市场最新一期股东增减持」 | `stock-share-chg`（`--is_last`） |
 || 「某股票某日股本是多少？」 | `stock-share` |
 || 「000001.SZ 在 20260716 的总股本与流通股本」 | `stock-share` |
+|| 「某股票的代码变更历史」 | `stk-code-change`（`--trade_code 001872.SZ`） |
+|| 「001872 之前用的什么代码」 | `stk-code-change`（`--trade_code 001872.SZ`） |
+|| 「某股票的上市/退市/暂停上市记录」 | `stk-status-change`（`--trade_code 600848.SH`） |
+|| 「某股票曾用名有哪些」 | `namechange`（`--trade_code 600848.SH`） |
+|| 「某股票高管、董事、独立董事有哪些」 | `stk-managers`（`--trade_code 000001.SZ`） |
+|| 「某股票管理层持股变动明细」 | `stk-manager-hold`（`--trade_code 000001.SZ`） |
+|| 「某股票高管年度薪酬」 | `stk-manager-pay`（`--trade_code 000001.SZ`） |
 || 「科创板实时行情筛选」 | `stock-filter`（`--board star`） |
 || 「600519 实时行情」 | `stock-filter`（`--symbol 600519.SH`） |
 || 「2024 年之后上市的创业板股票」 | `stock-filter`（`--board chi_next --listing_date_since 20240101`） |

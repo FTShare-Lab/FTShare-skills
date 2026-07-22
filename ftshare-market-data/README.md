@@ -5,7 +5,7 @@
 
 `ftshare-market-data` 是非凸科技（FT）金融行情数据的 **Skill 集**——不是 Python SDK，无需 `pip install`，**直接作为 Skill 加载到 Claude Code、Codex、OpenClaw 等 Agent 运行时即可使用**。
 
-它覆盖 A 股 / 港股 / 美股行情、财报、指数、ETF、基金、板块、资金流与宏观经济等数据：运行时读取本目录 `SKILL.md` 的 frontmatter（`name` + `description`）来决定何时触发，再通过统一的 `run.py` 路由入口执行对应子 skill（共 122 个，每个对应一条 FTShare 数据接口），子 skill 向标准输出打印 **JSON**，由运行时直接读取并交给上层投研工作流。
+它覆盖 A 股 / 港股 / 美股行情、财报、指数、ETF、基金、板块、资金流与宏观经济等数据：运行时读取本目录 `SKILL.md` 的 frontmatter（`name` + `description`）来决定何时触发，再通过统一的 `run.py` 路由入口执行对应子 skill（共 153 个，每个对应一条 FTShare 数据接口），子 skill 向标准输出打印 **JSON**，由运行时直接读取并交给上层投研工作流。
 
 ## 在 ftshare 生态中的位置
 
