@@ -85,10 +85,10 @@ def test_every_handler_cli_flag_is_statically_discoverable(handler):
 
 
 def test_handler_inventory_and_cli_surface_are_fully_enumerated():
-    assert len(HANDLERS) == 153
+    assert len(HANDLERS) == 164
     flags = {flag for handler in HANDLERS for flag in _argument_flags(handler)}
-    assert len(flags) == 96
-    assert sum(len(_argument_flags(handler)) for handler in HANDLERS) == 491
+    assert len(flags) == 107
+    assert sum(len(_argument_flags(handler)) for handler in HANDLERS) == 549
 
 
 @pytest.mark.parametrize("handler", HANDLERS, ids=lambda path: path.parents[1].name)

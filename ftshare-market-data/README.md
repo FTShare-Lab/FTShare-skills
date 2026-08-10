@@ -5,7 +5,7 @@
 
 `ftshare-market-data` 是非凸科技（FT）金融行情数据的 **Skill 集**——不是 Python SDK，无需 `pip install`，**直接作为 Skill 加载到 Claude Code、Codex、OpenClaw 等 Agent 运行时即可使用**。
 
-它覆盖 A 股 / 港股 / 美股行情、财报、指数、ETF、基金、板块、资金流与宏观经济等数据：运行时读取本目录 `SKILL.md` 的 frontmatter（`name` + `description`）来决定何时触发，再通过统一的 `run.py` 路由入口执行对应子 skill（共 153 个，每个对应一条 FTShare 数据接口），子 skill 向标准输出打印 **JSON**，由运行时直接读取并交给上层投研工作流。
+它覆盖 A 股 / 港股 / 美股行情、财报、指数、ETF、基金、板块、资金流与宏观经济等数据：运行时读取本目录 `SKILL.md` 的 frontmatter（`name` + `description`）来决定何时触发，再通过统一的 `run.py` 路由入口执行对应子 skill（共 164 个，每个对应一条 FTShare 数据接口），子 skill 向标准输出打印 **JSON**，由运行时直接读取并交给上层投研工作流。
 
 ## 在 ftshare 生态中的位置
 
@@ -14,7 +14,7 @@
 ```text
 FTShare 数据服务 (market.ft.tech)
     ↓  HTTP GET（Python 标准库 urllib）
-ftshare-market-data        # run.py 统一路由 + 122 个子 skill
+ftshare-market-data        # run.py 统一路由 + 164 个子 skill
     ↓
 Claude Code / Codex / OpenClaw   # Agent 运行时加载本 Skill
     ↓
@@ -134,13 +134,13 @@ python run.py stock-ipos --all
 
 ## 能力总览
 
-122 个子 skill 按业务域组织（每个子 skill 的接口详情见其 `SKILL.md`）：
+164 个子 skill 按业务域组织（每个子 skill 的接口详情见其 `SKILL.md`）：
 
 | 域 | 代表子 skill |
 |---|---|
-| **交易日 / 财经日历 / 新闻** | `get-nth-trade-date`、`financial-calendar`、`semantic-search-news` |
-| **A 股行情 / 基础** | `stock-list-all-stocks`、`stock-quotes-list`、`stock-daec-stocks`、`stock-realtime-list`、`stock-security-info`、`stock-ipos`、`stock-ohlcs`、`stock-prices`、`stock-intraday-prices`、`block-trades`、`margin-trading-details` |
-| **A 股财报 / 业绩** | `stock-income-*`、`stock-balance-*`、`stock-cashflow-*`、`stock-performance-express-*`、`stock-performance-forecast-*` |
+| **交易日 / 财经日历 / 新闻** | `get-nth-trade-date`、`trading-calendar`、`financial-calendar`、`semantic-search-news` |
+| **A 股行情 / 基础** | `stock-list-all-stocks`、`stock-quotes-list`、`stock-daec-stocks`、`stock-realtime-list`、`stock-security-info`、`stock-ipos`、`stock-ohlcs`、`stock-prices`、`stock-intraday-prices`、`daec-ohlcs`、`eastmoney-all-board-daily-ohlc`、`block-trades`、`margin-trading-details` |
+| **A 股财报 / 业绩** | `stock-income-*`、`stock-balance-*`、`stock-cashflow-*`、`stock-performance-express-*`、`stock-performance-forecast-*`、`report-announcement-list`、`report-announcement-summary` |
 | **A 股股东 / 质押 / 增减持** | `stock-holder-ten`、`stock-holder-ften`、`stock-holder-nums`、`pledge-summary`、`pledge-detail`、`stock-share-chg` |
 | **A 股公司行动** | `shareholder-meeting`、`stock-unlock-by-stock`、`stock-unlock-by-date`、`major-contract-by-date`、`major-contract-by-symbol`、`major-contract-summary` |
 | **A 股估值 / 千股千评 / 热度 / 资金流** | `eastmoney-stock-valuation`、`eastmoney-market-valuation`、`stock-comment-index/score/org-participate/desire/focus`、`stock-rank-xueqiu`、`stock-rank-eastmoney`、`stock-capital-flows` |
@@ -153,6 +153,7 @@ python run.py stock-ipos --all
 | **板块（东财 / 同花顺）** | `eastmoney-concept-boards`、`eastmoney-board-constituents/daily-ohlc/latest-ohlc`、`10jqk-board-list/kline/all-kline` |
 | **港股** | `company-hk`、`hk-view`、`hk-valuatnanalyd`、`hk-candlesticks`、`hk-income/cashflow/balance`、`northbound`、`southbound`、`eastmoney-hk-index-daily-kline`、`hsi-daily-weight` |
 | **美股** | `eastmoney-us-stock-list/daily-ohlc/latest-ohlc`、`us-basic`、`us-income/cashflow/balance` |
+| **期货** | `futures-eod-price`、`futures-kline-intraday`、`futures-kline-latest`、`eastmoney-futures-strange`、`member-build-process`、`member-position-ranking` |
 | **宏观经济（中国 + 美国）** | `economic-china-gdp/cpi/ppi/pmi/lpr/...-monthly`（15 项）、`economic-us-economic-by-type`（16 类，按 `--type`） |
 
 ### 名称 → 代码映射
