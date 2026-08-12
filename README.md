@@ -116,14 +116,14 @@ FTShare-market-data/README.md
 
 欢迎加入 FTShare 社区交流群，一起讨论 Skill 使用、数据级 Skill、业务级 Skill、Agent 投研工作流和项目贡献方向。
 
-<img src="docs/assets/wechat-group-20260812.png" alt="FTShare 微信交流群" width="320" />
+<img src="docs/assets/wechat-group-20260819.png" alt="FTShare 微信交流群" width="320" />
 
 > **群规说明**：
 > - 仅限 FTShare 项目、Skill 构建、金融数据接口、Agent 投研工作流相关讨论
 > - 禁止广告、推广、无关闲聊
 > - Bug、功能需求和 Skill 贡献建议，建议优先在 GitHub Issues 中提交，群内用于快速交流和补充说明
 
-**二维码有效期至 2026 年 8 月 12 日。** 如二维码失效，请在 Issues 中留言，维护者会更新入群方式。
+**二维码有效期至 2026 年 8 月 19 日。** 如二维码失效，请在 Issues 中留言，维护者会更新入群方式。
 
 ## Related Projects
 
