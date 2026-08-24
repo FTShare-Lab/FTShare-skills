@@ -1,138 +1,228 @@
-# FTShare Skills
+# FTShare Skill
 
 [中文](README.md) | [English](README_EN.md)
 
-![Python 3](https://img.shields.io/badge/python-3.x-blue)
-![Status](https://img.shields.io/badge/status-early_stage-orange)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
-`FTShare-skills` is an Agent Skills repository in the FTShare open-source ecosystem. It is designed to organize financial data Skills and investment research workflow Skills.
+`FTShare Skill` is FTShare's financial data integration for AI agents. It packages FTShare market data, financial statements, macroeconomic data, indexes, ETFs, funds, sectors, and news as Skills that agents can discover and call.
 
-This repository targets Agent runtimes such as Claude Code, Codex, and OpenClaw. Its goal is to package FTShare financial data capabilities and research workflows into Skills that Agents can understand, call, and reuse, helping Agents move from "calling data" toward "completing research tasks".
+After loading `ftshare-market-data` into Claude Code, Codex, OpenClaw, or another compatible agent runtime, users can ask data questions in natural language. The agent reads `SKILL.md`, selects the appropriate interface, runs the unified entry point, and consumes the structured JSON result.
 
-For international developers, this repository can be understood as **FTShare Agent Skills for financial data, market data, and investment research workflows**, serving AI finance agents, MCP tools, and automated research scenarios.
+## Three ways to connect to FTShare
 
-## Repository Positioning
+FTShare provides SDK, MCP, and Skill integrations. All three connect to the same FTShare financial data capabilities and serve different environments.
 
-`FTShare-skills` is not a single data-interface repository, and it is not the Python SDK.
+| Integration | Best for | How it works | Project |
+|---|---|---|---|
+| Python SDK | Python applications, data analysis, and quantitative research | Called from Python and returns pandas `DataFrame` objects | [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk) |
+| MCP | AI clients and agents that support MCP | Exposes FTShare as standard MCP tools | [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP) |
+| Skill | Agent runtimes such as Claude Code, Codex, and OpenClaw | Loads `SKILL.md` so the agent can select and execute an interface | This repository |
 
-It carries two categories of capabilities:
-
-1. **Data-level Skills**  
-   Wrap FTShare market data, financial data, macro data, index data, ETF data, fund data, Hong Kong and US stock data, news, and related interfaces so that Agents can retrieve structured financial data reliably.
-
-2. **Business-level Skills**  
-   Organize data capabilities into investment research workflows such as stock analysis, financial statement interpretation, industry analysis, post-market review, and portfolio analysis, so that Agents can do more than just "fetch data".
-
-The currently available data-level Skill is `FTShare-market-data`. Business-level Skills for real investment research scenarios will be added gradually.
-
-## Repository Contents
-
-```text
-FTShare-skills/
-  FTShare-market-data/          # Data-level Skill: FTShare financial data interface wrapper
-    README.md                   # Installation, usage, parameters, and examples
-    SKILL.md
-    run.py
-    sub-skills/
-
-  business-skills/              # Planned directory for business-level Skills
-```
-
-Current notes:
-
-- The root README describes the positioning and structure of the overall Skill repository.
-- For installation, usage, parameters, and examples of a specific Skill, read the README in that Skill directory.
-- The currently available Skill is `FTShare-market-data`.
-- Business-level Skills will be added in future versions.
+Use the SDK for programmatic access in Python projects. Use MCP when an AI client needs a standard tool interface. Use Skill when an agent should understand the available data and route natural-language requests directly to the right interface.
 
 ## Available Skill
 
-### FTShare-market-data
-
-`FTShare-market-data` is the currently available data-level Skill. It allows Agents to call FTShare financial data capabilities.
-
-It covers A-shares, Hong Kong stocks, US stocks, ETFs, funds, indexes, sectors, capital flows, macroeconomic data, financial calendars, news, and related data areas.
-
-For detailed usage, see:
+This repository currently provides one installable parent Skill.
 
 ```text
-FTShare-market-data/README.md
+ftshare-market-data
 ```
 
-## Planned Business-level Skills
-
-Future directions include:
-
-- Stock analysis Skill
-- Financial statement interpretation Skill
-- Industry analysis Skill
-- Post-market review Skill
-- Portfolio analysis Skill
-- Event analysis Skill
-- Standard research data packages
-- Automated report generation workflows for Agents
-
-The goal of business-level Skills is not to expose more raw interfaces, but to organize data, logic, and output structure around real research tasks.
-
-Example:
+It contains 164 internal financial data routes. Each route maps to one FTShare data capability. The runtime loads the parent Skill, which then selects the appropriate internal route for the user's request.
 
 ```text
-User: Analyze Kweichow Moutai
+User asks a financial data question
     ↓
-The business-level Skill decides what data is needed
+Agent reads ftshare-market-data/SKILL.md
     ↓
-Calls data-level Skills / MCP tools / standard data packages
+Agent selects a child Skill
     ↓
-Fetches market data, valuation, financials, shareholders, capital flows, news, and related data
+run.py calls the FTShare data service
     ↓
-Organizes the result into a structured analysis output
+Agent reads the JSON result and prepares the response
 ```
 
-## Current Stage
+## Data coverage
 
-This repository is in an early construction stage.
+The 164 internal routes currently cover the following areas.
 
-The current focus is to build the data-level Skill, namely `FTShare-market-data`. It provides the underlying data capability for future business-level Skills.
+| Data area | Representative capabilities |
+|---|---|
+| China A-shares | Security lists, real-time quotes, intraday prices, candlesticks, IPOs, block trades, margin trading, capital flows, limit-up and limit-down pools |
+| Financial and company data | Income statements, balance sheets, cash flows, forecasts, express reports, shareholders, pledges, unlocks, and major contracts |
+| ETFs and funds | ETF quotes, components, PCF files, fund NAV, returns, portfolios, fees, and risk levels |
+| Indexes and sectors | Index quotes, weights, descriptions, Eastmoney sectors, and Tonghuashun sectors |
+| Hong Kong and US markets | Quotes, candlesticks, valuation, company profiles, financial statements, and Hang Seng index weights |
+| Convertible bonds and futures | Convertible bond profiles and candlesticks, futures quotes, and member position rankings |
+| Macro and news | China macro data, US economic indicators, financial calendars, and semantic news search |
 
-The repository will gradually evolve from "data-level Skills" to "investment research workflow Skills".
+See [ftshare-market-data/README.md](ftshare-market-data/README.md) and each child Skill's `SKILL.md` for the complete interface, parameter, and field documentation.
 
-## Scope
+## Installation
 
-Please note:
+Clone the repository.
 
-- `FTShare-market-data` is a data-level Skill, not a full research report generator.
-- Business-level Skills are still under construction.
-- If you need to call data from Python code, use [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk).
-- If you need a standard MCP tool entry point, use [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP).
-- This repository focuses on Agent Skills, not traditional Python packages.
+```bash
+git clone https://github.com/FTShare-Lab/FTShare-skills.git
+cd FTShare-skills
+```
+
+Place the complete `ftshare-market-data` directory in your agent runtime's Skill directory.
+
+Claude Code can load it from a project-level or user-level directory.
+
+```text
+.claude/skills/ftshare-market-data/
+~/.claude/skills/ftshare-market-data/
+```
+
+Codex can load it from the user-level Skill directory.
+
+```text
+~/.codex/skills/ftshare-market-data/
+```
+
+For other agent runtimes, place the complete directory in the corresponding Skill path and make sure the runtime can read `SKILL.md`, `run.py`, and `sub-skills/`.
+
+Python 3.9 or later is the only runtime requirement. Child Skills use the Python standard library and do not require `pandas` or `requests`.
+
+## Quick start
+
+After loading the Skill, ask the agent a data question in natural language.
+
+| User request | Command selected by the agent |
+|---|---|
+| List all China A-share securities | `python3 <RUN_PY> stock-list-all-stocks` |
+| Rank real-time A-share quotes by price change | `python3 <RUN_PY> stock-daec-stocks --board all --page 1 --page_size 5 --order_by "change_rate desc"` |
+| Get today's intraday prices for SPD Bank | `python3 <RUN_PY> stock-intraday-prices --symbol 600000.XSHG --range Today` |
+| Get one month of daily candlesticks for Ping An Bank | `python3 <RUN_PY> stock-ohlcs --symbol 000001.SZ --since 20260501` |
+| Get CSI 300 constituent weights | `python3 <RUN_PY> index-weight-list --index-code 000300` |
+| Get the latest US nonfarm payroll data | `python3 <RUN_PY> economic-us-economic-by-type --type nonfarm-payroll` |
+
+`<RUN_PY>` is the absolute path to `ftshare-market-data/run.py`.
+
+You can also call the Skill directly from a terminal.
+
+```bash
+python3 ftshare-market-data/run.py stock-list-all-stocks
+python3 ftshare-market-data/run.py limit-up-pool
+python3 ftshare-market-data/run.py semantic-search-news --query artificial-intelligence
+python3 ftshare-market-data/run.py company-hk --trade_code 00700.HK
+```
+
+Run `run.py` without a child Skill name to list every available route.
+
+```bash
+python3 ftshare-market-data/run.py
+```
+
+## Invocation contract
+
+`run.py` is the unified dispatcher. The standard command format is shown below.
+
+```bash
+python3 <RUN_PY> <child-skill-name> [arguments...]
+```
+
+Each child Skill has its own documentation file.
+
+```text
+ftshare-market-data/sub-skills/<child-skill-name>/SKILL.md
+```
+
+The file describes when to use the Skill, its arguments, endpoint, response structure, and examples. An agent should read the matching documentation before running the command.
+
+## Output
+
+Child Skills print JSON to standard output. The agent can turn that result into a table, a summary, or a structure for further analysis.
+
+For manual calls, use `jq` to inspect the result.
+
+```bash
+python3 ftshare-market-data/run.py stock-list-all-stocks | jq '.items[0:3]'
+```
+
+Paginated interfaces support single-page queries. Some also support `--all` for automatic pagination.
+
+```bash
+python3 ftshare-market-data/run.py stock-ipos --page 1 --page_size 20
+python3 ftshare-market-data/run.py stock-ipos --all
+```
+
+## Name-to-code mapping
+
+Some interfaces accept security codes only. When a user provides a name, the agent should first use a list or description interface to resolve the standard code.
+
+| Target | Code format | Recommended mapping interface |
+|---|---|---|
+| Index | `000300` or `000300.XSHG` | `index-description-paginated`, `index-description-all` |
+| ETF | `510050.XSHG` | `etf-description-all`, `etf-list-paginated` |
+| Fund | Six-digit fund code | `fund-overview-all-funds-paginated` |
+| Convertible bond | `110070.SH` | `cb-lists` |
+| Hong Kong stock | `00700.HK` | `company-hk`, `hk-view` |
+
+## Base URL
+
+Interfaces on `market.ft.tech` use the following base URL by default.
+
+```text
+https://market.ft.tech/gateway
+```
+
+Set `FTSHARE_BASE_URL` to use a local or internal service.
+
+```bash
+FTSHARE_BASE_URL=http://127.0.0.1:8000/ python3 ftshare-market-data/run.py stock-list-all-stocks
+```
+
+A small number of interfaces use other FTShare service addresses. Refer to the matching child Skill documentation for details.
+
+## Security constraints
+
+- `run.py` executes only handlers that exist under `sub-skills/`, preventing a name from resolving to another path.
+- Handlers with origin validation check that the request scheme and host match the configured base URL.
+- Download interfaces validate output arguments. Save files only under the current working directory and avoid symbolic-link paths.
+- Skills should not read or expose user keys, tokens, or other sensitive information.
+
+## Repository structure
+
+```text
+FTShare-skills/
+  README.md
+  README_EN.md
+  CONTRIBUTING.md
+  SECURITY.md
+  ftshare-market-data/
+    README.md
+    SKILL.md
+    run.py
+    test_handlers_contract.py
+    sub-skills/
+      <child-skill-name>/
+        SKILL.md
+        scripts/
+          handler.py
+```
 
 ## Contributing
 
-Contributions are welcome for new data-level Skills, business-level Skills, documentation improvements, and examples.
+Contributions are welcome for new financial data child Skills, interface adapters, tests, documentation improvements, and examples. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
-Before contributing, read [CONTRIBUTING.md](CONTRIBUTING.md), which covers Skill structure, documentation requirements, submission workflow, and security notes.
+Use GitHub Issues for general questions and feature requests. Report security problems using the process in [SECURITY.md](SECURITY.md).
 
 ## Community
 
-Chinese users are welcome to join the FTShare WeChat community group to discuss Skill usage, data-level Skills, business-level Skills, Agent-based investment research workflows, and contribution directions.
+Join the FTShare WeChat community group to discuss Skill integration, financial data interfaces, agent usage, and project contributions.
 
 <img src="docs/assets/wechat-group-20260826.png" alt="FTShare WeChat community group" width="320" />
 
-> **Community rules**:
-> - Discussions should be related to FTShare, Skill building, financial data interfaces, or Agent research workflows
-> - Advertising, promotion, and unrelated off-topic chat are not allowed
-> - For bugs, feature requests, and Skill contribution ideas, please open a GitHub Issue first. The group is for quick discussion and follow-up context
+> The group is limited to FTShare, financial data, Skills, and agents. Please submit bugs and feature requests through GitHub Issues first.
 
-**The QR code is valid until August 26, 2026.** If it expires, please open an Issue and the maintainers will update the invitation.
-
-## Related Projects
-
-- [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk): FTShare financial data Python SDK for developer-facing data access
-- [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP): FTShare financial data MCP tool documentation and integration guide for Agent tool calls
-- [FTShare-skills](https://github.com/FTShare-Lab/FTShare-skills): FTShare Agent Skills repository for data-level Skills and investment research workflow Skills
+**The QR code is valid until August 26, 2026.** If it expires, please open an Issue.
 
 ## License
 
 This project is released under the MIT License. See [LICENSE](LICENSE).
 
-The MIT License applies to the source code and Skill implementations in this repository. It does not mean FTShare data services are available without restriction. Access quota, permissions, and commercial use of FTShare data interfaces are subject to FTShare data service terms.
+The MIT License applies to the code and Skill implementations in this repository. FTShare data-service quotas, permissions, and commercial use remain subject to the applicable service terms.

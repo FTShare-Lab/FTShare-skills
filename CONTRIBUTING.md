@@ -2,10 +2,7 @@
 
 感谢你关注 `FTShare-skills`。
 
-本仓库是 ftshare 生态的 Agent Skill 仓库，用于沉淀金融数据 Skill 和投研业务 Skill。贡献内容主要分为两类：
-
-1. 数据级 Skill：封装 FTShare 金融数据接口，让 Agent 能稳定获取结构化数据。
-2. 业务级 Skill：围绕个股分析、财报解读、行业分析、复盘、持仓分析等投研任务组织工作流。
+本仓库是 FTShare 面向 Agent 运行时提供的金融数据 Skill 接入项目。贡献内容围绕 `ftshare-market-data` 展开，包括金融数据子 Skill、接口适配、测试、文档和使用示例。
 
 ## 开发准备
 
@@ -19,7 +16,7 @@ cd FTShare-skills
 查看当前可用 Skill：
 
 ```bash
-python FTShare-market-data/run.py
+python3 ftshare-market-data/run.py
 ```
 
 ## 新增或修改 Skill
@@ -33,19 +30,9 @@ python FTShare-market-data/run.py
 - 输出结构稳定，优先使用 JSON
 - 下载类接口限制输出路径
 - README 与实际能力保持同步
-- 数据级 Skill 与业务级 Skill 职责清晰分离
-
-## 业务级 Skill 要求
-
-新增业务级 Skill 时，建议至少说明：
-
-- 适用场景
-- 输入参数
-- 调用的数据能力
-- 输出结构
-- 示例问题
-- 示例结果
-- 数据质量与风险提示
+- 新增子 Skill 时同步更新父 Skill 的能力总览
+- 涉及金融数据解释时写清时间、口径与返回字段
+- 不在 Skill 中保存或输出用户密钥、令牌与其他敏感信息
 
 ## 提交流程
 
