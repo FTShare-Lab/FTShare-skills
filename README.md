@@ -215,11 +215,11 @@ FTShare-skills/
 
 欢迎加入 FTShare 社区交流群，讨论 Skill 接入、金融数据接口、Agent 使用和项目贡献。
 
-<img src="docs/assets/wechat-group-20260826.png" alt="FTShare 微信交流群" width="320" />
+<img src="docs/assets/wechat-group-20260902.png" alt="FTShare 微信交流群" width="320" />
 
 > 群内仅讨论 FTShare、金融数据、Skill 和 Agent 相关内容。Bug 与功能需求建议优先提交 GitHub Issue。
 
-**二维码有效期至 2026 年 8 月 26 日。** 如二维码失效，请在 Issues 中留言。
+**二维码有效期至 2026 年 9 月 2 日。** 如二维码失效，请在 Issues 中留言。
 
 ## License
 

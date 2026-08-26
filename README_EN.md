@@ -215,11 +215,11 @@ Use GitHub Issues for general questions and feature requests. Report security pr
 
 Join the FTShare WeChat community group to discuss Skill integration, financial data interfaces, agent usage, and project contributions.
 
-<img src="docs/assets/wechat-group-20260826.png" alt="FTShare WeChat community group" width="320" />
+<img src="docs/assets/wechat-group-20260902.png" alt="FTShare WeChat community group" width="320" />
 
 > The group is limited to FTShare, financial data, Skills, and agents. Please submit bugs and feature requests through GitHub Issues first.
 
-**The QR code is valid until August 26, 2026.** If it expires, please open an Issue.
+**The QR code is valid until September 2, 2026.** If it expires, please open an Issue.
 
 ## License
 
