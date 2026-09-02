@@ -9,7 +9,16 @@ import urllib.request
 import os
 SAFE_URLOPENER = urllib.request.build_opener()
 
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
+
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 
 def safe_urlopen(req_or_url):
     if isinstance(req_or_url, urllib.request.Request):
@@ -20,6 +29,13 @@ def safe_urlopen(req_or_url):
     if parsed.scheme != urllib.parse.urlparse(BASE_URL).scheme or parsed.netloc != urllib.parse.urlparse(BASE_URL).netloc:
         print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
         sys.exit(1)
+    if not isinstance(req_or_url, urllib.request.Request):
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
+    if isinstance(req_or_url, urllib.request.Request):
+        for key, value in _REQUEST_HEADERS.items():
+            req_or_url.add_unredirected_header(key, value)
+    else:
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
 ENDPOINT = "/api/v1/market/data/margin-trading-details"
@@ -41,6 +57,7 @@ def fetch_page(page: int, page_size: int, date: str = None) -> dict:
 
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="获取 A 股融资融券明细")
     parser.add_argument("--page", type=int, default=1, help="页码（从 1 开始）")
     parser.add_argument("--date", type=str, default=None, help="查询日期，格式 YYYYMMDD")

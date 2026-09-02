@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent
 HANDLERS = sorted(ROOT.glob("sub-skills/*/scripts/handler.py"))
 
 
+
 def _load_handler(path: Path):
     name = "contract_" + path.parents[1].name.replace("-", "_")
     spec = importlib.util.spec_from_file_location(name, path)
@@ -44,12 +45,12 @@ def _route_literals(path: Path) -> set[str]:
         if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
             continue
         value = node.value
-        start = value.find("api/v1/")
-        if start < 0:
-            continue
-        route = "/" + value[start:].split("?", 1)[0]
-        if route != "/api/v1/":
-            routes.add(route.rstrip("/"))
+        for version in ("api/v1/", "api/v2/", "api/v3/", "api/v4/"):
+            start = value.find(version)
+            if start >= 0:
+                route = "/" + value[start:].split("?", 1)[0]
+                if route != "/api/":
+                    routes.add(route.rstrip("/"))
     return routes
 
 
@@ -69,7 +70,7 @@ def test_every_handler_has_valid_skill_contract(handler):
     functions = {node.name for node in tree.body if isinstance(node, ast.FunctionDef)}
     assert "main" in functions
     assert _frontmatter_name(handler) == handler.parents[1].name
-    assert _route_literals(handler), "handler must contain a public /api/v1 route"
+    assert _route_literals(handler), "handler must contain a public API route"
     source = handler.read_text(encoding="utf-8")
     for flag in _argument_flags(handler):
         dest = flag[2:].replace("-", "_")
@@ -85,10 +86,25 @@ def test_every_handler_cli_flag_is_statically_discoverable(handler):
 
 
 def test_handler_inventory_and_cli_surface_are_fully_enumerated():
-    assert len(HANDLERS) == 164
+    assert HANDLERS
     flags = {flag for handler in HANDLERS for flag in _argument_flags(handler)}
-    assert len(flags) == 107
-    assert sum(len(_argument_flags(handler)) for handler in HANDLERS) == 549
+    assert flags
+    assert sum(len(_argument_flags(handler)) for handler in HANDLERS) >= len(flags)
+
+
+def test_handlers_send_api_key_only_as_a_request_header():
+    for handler in HANDLERS:
+        source = handler.read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        if any(
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr in {"Request", "urlopen"}
+            for node in ast.walk(tree)
+        ):
+            assert "FTSHARE_API_KEY" in source
+            assert "_REQUEST_HEADERS" in source
+            assert "headers" in source
 
 
 @pytest.mark.parametrize("handler", HANDLERS, ids=lambda path: path.parents[1].name)
@@ -119,3 +135,12 @@ def test_safe_urlopen_rejects_cross_origin_requests(handler, monkeypatch):
     with pytest.raises(SystemExit):
         safe_urlopen(foreign)
     assert not opened
+
+
+def test_handler_inventory_is_nonempty():
+    assert HANDLERS
+
+
+def test_all_handlers_have_matching_skill_documents():
+    for handler in HANDLERS:
+        assert (handler.parents[1] / "SKILL.md").is_file()

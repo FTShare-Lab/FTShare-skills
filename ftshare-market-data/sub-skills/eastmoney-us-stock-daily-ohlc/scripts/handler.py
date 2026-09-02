@@ -16,7 +16,17 @@ import os
 SAFE_URLOPENER = urllib.request.build_opener()
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 ENDPOINT = "/api/v1/market/data/eastmoney-us-stock-daily-ohlc"
+
+
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
 
 MAX_WINDOW_DAYS = 3  # 每次请求日期跨度不超过 3 天
 
@@ -30,6 +40,13 @@ def safe_urlopen(req_or_url):
     if parsed.scheme != urllib.parse.urlparse(BASE_URL).scheme or parsed.netloc != urllib.parse.urlparse(BASE_URL).netloc:
         print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
         sys.exit(1)
+    if not isinstance(req_or_url, urllib.request.Request):
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
+    if isinstance(req_or_url, urllib.request.Request):
+        for key, value in _REQUEST_HEADERS.items():
+            req_or_url.add_unredirected_header(key, value)
+    else:
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
 
@@ -117,6 +134,7 @@ def fetch_by_windows(stock_code: str, start_date: str, end_date: str) -> list:
 
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="查询东财美股历史日K线（3天窗口分批）")
     parser.add_argument("--stock_code", required=True, help="股票代码，如 AAL")
     parser.add_argument("--start_date", default=None, help="起始日期（含），格式 YYYY-MM-DD 或 YYYYMMDD")

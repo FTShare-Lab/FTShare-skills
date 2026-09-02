@@ -1,6 +1,6 @@
 ---
 name: stock-candlesticks-batch
-description: 批量获取多只股票/ETF/可转债/指数 K 线 POST 接口（market.ft.tech，stock-candlesticks/batch）。用户问多只标的的 K 线、批量日 K/周 K/月 K/年 K、混合多类证券的 K 线时使用。必填 --symbols、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
+description: 批量获取多只股票/ETF/可转债/指数 K 线 GET 接口（market.ft.tech，stock-candlesticks/batch）。用户问多只标的的 K 线、批量日 K/周 K/月 K/年 K、混合多类证券的 K 线时使用。必填 --symbols、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
 ---
 
 # 批量股票 K 线 - 批量查询多只标的 K 线（stock-candlesticks/batch）
@@ -10,8 +10,8 @@ description: 批量获取多只股票/ETF/可转债/指数 K 线 POST 接口（m
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 批量查询多只标的 K 线（通用） |
-| 外部接口 | `POST /api/v1/market/data/stock-candlesticks/batch` |
-| 请求方式 | POST（JSON body） |
+| 外部接口 | `GET /api/v1/market/data/stock-candlesticks/batch` |
+| 请求方式 | GET（query 参数） |
 | 适用场景 | 一次拉取股票 / ETF / 可转债 / 指数等多只标的的分/日/周/月/年 K 线。响应为嵌套数组 `[[symbol, K线数组], ...]`。通用语义，允许不同证券类别混合查询 |
 
 ## 2. 请求参数

@@ -8,7 +8,16 @@ import urllib.parse
 import urllib.request
 import os
 
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
+
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 ENDPOINT_PREFIX = "/api/v1/market/data/daec/stocks"
 
 SAFE_URLOPENER = urllib.request.build_opener()
@@ -45,7 +54,7 @@ def fetch_page(board: str, page: int = 1, page_size: int = 20, filter_: str = ""
     qs = urllib.parse.urlencode(params)
     board_path = urllib.parse.quote(board.strip(), safe="")
     url = f"{BASE_URL}{ENDPOINT_PREFIX}/{board_path}?{qs}"
-    req = urllib.request.Request(url, headers=HEADERS)
+    req = urllib.request.Request(url, headers={**HEADERS, **_REQUEST_HEADERS})
     try:
         with safe_urlopen(req) as resp:
             return json.loads(resp.read().decode())
@@ -70,6 +79,7 @@ def fetch_all(board: str, page_size: int = 200, filter_: str = "", order_by: str
 
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="查询 A 股行情列表 daec 全字段族")
     parser.add_argument("--board", required=True, choices=["all", "xshg", "xshe", "bjse"], help="板块：all/xshg/xshe/bjse")
     parser.add_argument("--page", type=int, default=1, help="页码，从 1 开始")

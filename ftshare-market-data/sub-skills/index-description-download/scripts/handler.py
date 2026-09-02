@@ -9,9 +9,32 @@ import urllib.parse
 import urllib.request
 from typing import Optional
 
+
+def safe_urlopen(req, timeout=30):
+    url = req.full_url if isinstance(req, urllib.request.Request) else str(req)
+    parsed = urllib.parse.urlparse(url)
+    base = urllib.parse.urlparse(BASE_URL)
+    if parsed.scheme != base.scheme or parsed.netloc != base.netloc:
+        print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
+        sys.exit(1)
+    if not isinstance(req, urllib.request.Request):
+        req = urllib.request.Request(url, method="GET")
+    for key, value in _REQUEST_HEADERS.items():
+        req.add_unredirected_header(key, value)
+    return SAFE_URLOPENER.open(req, timeout=timeout)
+
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
+
 SAFE_URLOPENER = urllib.request.build_opener()
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 PATH_PREFIX = "/api/v1/market/data/index/index_description/"
 
 
@@ -33,6 +56,7 @@ def _safe_output_path(path: str, base_dir: Optional[str] = None) -> str:
 
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="下载指数描述 PDF（路径参数 url_hash）")
     parser.add_argument(
         "--url-hash",
@@ -56,11 +80,11 @@ def main():
 
     path = PATH_PREFIX + urllib.parse.quote(url_hash, safe="")
     url = BASE_URL + path
-    req = urllib.request.Request(url, method="GET")
+    req = urllib.request.Request(url, method="GET", headers=_REQUEST_HEADERS)
     req.add_header("X-Client-Name", "ft-claw")
 
     try:
-        with SAFE_URLOPENER.open(req) as resp:
+        with safe_urlopen(req, timeout=30) as resp:
             data = resp.read()
 
         if len(data) < 500 and data[:1] == b"{":

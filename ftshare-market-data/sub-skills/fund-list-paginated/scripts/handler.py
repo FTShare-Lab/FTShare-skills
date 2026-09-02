@@ -9,7 +9,16 @@ import urllib.request
 import os
 SAFE_URLOPENER = urllib.request.build_opener()
 
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
+
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 
 def safe_urlopen(req_or_url):
     if isinstance(req_or_url, urllib.request.Request):
@@ -20,6 +29,13 @@ def safe_urlopen(req_or_url):
     if parsed.scheme != urllib.parse.urlparse(BASE_URL).scheme or parsed.netloc != urllib.parse.urlparse(BASE_URL).netloc:
         print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
         sys.exit(1)
+    if not isinstance(req_or_url, urllib.request.Request):
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
+    if isinstance(req_or_url, urllib.request.Request):
+        for key, value in _REQUEST_HEADERS.items():
+            req_or_url.add_unredirected_header(key, value)
+    else:
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
 ENDPOINT = "/api/v1/market/data/fund/fund-list"
@@ -36,7 +52,8 @@ def build_params(args):
         params["page_size"] = args.page_size
     return params
 
-def fetch(args):
+def fetch(
+args):
     params = urllib.parse.urlencode(build_params(args))
     url = f"{BASE_URL}{ENDPOINT}?{params}"
     try:
@@ -48,6 +65,7 @@ def fetch(args):
         sys.exit(1)
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="基金列表")
     parser.add_argument("--fund_code", required=False, help="基金代码，精确查单只")
     parser.add_argument("--fund_type", required=False, help="基金类型，精确匹配（股票型/混合型/债券型/货币型/保本型/其他型/REITs）")

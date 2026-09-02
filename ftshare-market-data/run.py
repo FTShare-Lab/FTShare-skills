@@ -25,8 +25,6 @@ ftshare-market-data 统一调度入口。
     python run.py fund-support-symbols-all-funds-paginated --page 1 --page-size 20
     python run.py get-nth-trade-date --n 5
     python run.py company-hk --trade_code 00700.HK
-    python run.py hk-valuatnanalyd --trade_code 00700.HK --page 1 --page_size 20
-    python run.py hk-view --hk_code 00700.HK
     python run.py hk-candlesticks --trade-code 00700.HK --interval-unit day --until-date 2026-03-24 --since-date 2026-03-01 --limit 20
     python run.py index-description-paginated --page 1 --page-size 20
     python run.py index-description-download --url-hash <url_hash> --output ./index-desc.pdf

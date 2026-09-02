@@ -10,7 +10,7 @@ description: 查询全部 ETF 基础信息（market.ft.tech）。用户问 ETF �
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询全部ETF基础信息 |
-| 外部接口 | `/api/v1/market/data/etf-description-all` |
+| 外部接口 | `/api/v2/market/data/etf-description-all` |
 | 请求方式 | GET |
 | 适用场景 | 获取 ETF 列表（代码与名称）及部分基础属性信息，用于列表展示、筛选与检索 |
 

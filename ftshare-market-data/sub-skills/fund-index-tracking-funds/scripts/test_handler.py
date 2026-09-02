@@ -25,7 +25,7 @@ class TestFetch(unittest.TestCase):
         args.scope = None
         handler.fetch(args)
         url = mock_open.call_args[0][0]
-        self.assertIn("/api/v1/market/data/fund/index-fund", url)
+        self.assertIn("/api/v2/market/data/fund/index-fund", url)
         self.assertIn("index_code=", url)
 
 class TestMain(unittest.TestCase):

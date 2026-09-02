@@ -22,7 +22,7 @@ class TestFetch(unittest.TestCase):
         mock_open.return_value.__enter__.return_value.read.return_value = b"[]"
         handler.fetch("600519.SH", "star", None, 1, 5)
         url = mock_open.call_args[0][0]
-        self.assertIn("/api/v1/market/data/stock-list/filter", url)
+        self.assertIn("/api/v2/market/data/stock-list/filter", url)
         self.assertIn("symbol=600519.SH", url)
         self.assertNotIn("board=", url)
         self.assertIn("page=1", url)

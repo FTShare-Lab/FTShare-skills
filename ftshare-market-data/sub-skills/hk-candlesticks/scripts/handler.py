@@ -10,9 +10,18 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 import os
 
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
+
 SAFE_URLOPENER = urllib.request.build_opener()
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 
 INTERVAL_UNITS = ("day", "month", "quarter", "year")
 ADJUST_KINDS = ("forward", "none")
@@ -30,6 +39,13 @@ def safe_urlopen(req_or_url):
     if parsed.scheme != urllib.parse.urlparse(BASE_URL).scheme or parsed.netloc != urllib.parse.urlparse(BASE_URL).netloc:
         print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
         sys.exit(1)
+    if not isinstance(req_or_url, urllib.request.Request):
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
+    if isinstance(req_or_url, urllib.request.Request):
+        for key, value in _REQUEST_HEADERS.items():
+            req_or_url.add_unredirected_header(key, value)
+    else:
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
 
@@ -54,6 +70,7 @@ def _validate_date(value: str, name: str) -> str:
 
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="查询港股 K 线")
     parser.add_argument(
         "--trade-code",
@@ -110,19 +127,19 @@ def main():
     params = {
         "trade_code": args.trade_code.strip(),
         "interval_unit": args.interval_unit,
-        "until_date": until_date,
+        "until_date": until_date.replace("-", ""),
         "adjust_kind": args.adjust_kind,
         "interval_value": args.interval_value,
     }
     if since_date is not None:
-        params["since_date"] = since_date
+        params["since_date"] = since_date.replace("-", "")
     if args.limit is not None:
         params["limit"] = args.limit
 
-    path = "/api/v1/market/data/hk/hk-candlesticks"
+    path = "/api/v3/market/data/hk/hk-candlesticks"
     url = BASE_URL + path + "?" + urllib.parse.urlencode(params)
 
-    req = urllib.request.Request(url, method="GET")
+    req = urllib.request.Request(url, method="GET", headers=_REQUEST_HEADERS)
 
     try:
         with safe_urlopen(req) as resp:
