@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/eastmoney-dapan-flow'
+ENDPOINT = '/api/v1/market/data/eastmoney-dapan-flow'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():
@@ -25,21 +25,21 @@ def main():
     parser.add_argument("--end_date")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--sh_close", required=True)
-    parser.add_argument("--sh_change_pct", required=True)
-    parser.add_argument("--sz_close", required=True)
-    parser.add_argument("--sz_change_pct", required=True)
-    parser.add_argument("--main_net", required=True)
-    parser.add_argument("--main_pct", required=True)
-    parser.add_argument("--xlarge_net", required=True)
-    parser.add_argument("--xlarge_pct", required=True)
-    parser.add_argument("--large_net", required=True)
-    parser.add_argument("--large_pct", required=True)
-    parser.add_argument("--mid_net", required=True)
-    parser.add_argument("--mid_pct", required=True)
-    parser.add_argument("--small_net", required=True)
-    parser.add_argument("--small_pct", required=True)
+    parser.add_argument("--total", required=False)
+    parser.add_argument("--sh_close", required=False)
+    parser.add_argument("--sh_change_pct", required=False)
+    parser.add_argument("--sz_close", required=False)
+    parser.add_argument("--sz_change_pct", required=False)
+    parser.add_argument("--main_net", required=False)
+    parser.add_argument("--main_pct", required=False)
+    parser.add_argument("--xlarge_net", required=False)
+    parser.add_argument("--xlarge_pct", required=False)
+    parser.add_argument("--large_net", required=False)
+    parser.add_argument("--large_pct", required=False)
+    parser.add_argument("--mid_net", required=False)
+    parser.add_argument("--mid_pct", required=False)
+    parser.add_argument("--small_net", required=False)
+    parser.add_argument("--small_pct", required=False)
     parser.add_argument("--name", required=True)
     args = parser.parse_args()
     params = {}

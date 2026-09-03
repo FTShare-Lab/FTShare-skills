@@ -14,7 +14,7 @@ description: 单只股票/ETF/指数/可转债历史 K 线 GET 接口（market.f
 | 请求方式 | GET（query 参数） |
 | 适用场景 | 获取股票 / ETF / 指数 / 可转债等标的的分/日/周/月/年 K 线，含开高低收、成交量、成交额；支持前复权 / 后复权 / 不复权。通用语义，不做证券类别校验 |
 
-> 与 `stock-ohlcs`（`GET daec/history/ohlcs`，YYYYMMDD 日期区间，仅日/周/月）区别：本接口走 GET query 参数，参数为毫秒时间戳，支持分钟级与年 K，是统一的 candlesticks 契约，且允许股票/ETF/指数/可转债等不同类别标的。
+> 本接口统一使用毫秒时间戳和 GET query 参数，支持分钟级与年 K，并允许股票、ETF、指数、可转债等不同类别标的。
 
 ## 2. 请求参数
 

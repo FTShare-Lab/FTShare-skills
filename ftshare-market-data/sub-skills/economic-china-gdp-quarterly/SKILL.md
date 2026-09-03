@@ -24,3 +24,9 @@ python script/handler.py
 - 返回按 `period` 季度汇总，如「2025年第1季度」「2025年第1-3季度」「2025年第1-4季度」
 - 数值单位见 `unit`（亿元），同比类字段单位为 %
 - 列表已按时间倒序，最新季度在前
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-gdp-quarterly
+```

@@ -25,7 +25,7 @@ class TestFetch(unittest.TestCase):
                       None, 1756791000000, 2)
         req = mock_open.call_args[0][0]
         self.assertEqual(req.get_method(), "GET")
-        self.assertIn("/api/v1/market/data/stock-candlesticks/batch", req.full_url)
+        self.assertIn("/api/v2/market/data/stock-candlesticks/batch", req.full_url)
         self.assertIsNone(req.data)
         self.assertEqual(req.headers.get("X-client-name"), "ft-claw")
 

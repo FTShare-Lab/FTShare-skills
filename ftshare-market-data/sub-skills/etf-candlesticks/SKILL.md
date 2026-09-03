@@ -48,7 +48,7 @@ description: 单只 ETF 历史 K 线 GET 接口（market.ft.tech，etf-candlesti
 通过主目录 `run.py` 调用：
 
 ```bash
-python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 5
 python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Minute --interval-value 5 --adjust-kind Forward --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 100
 ```
 

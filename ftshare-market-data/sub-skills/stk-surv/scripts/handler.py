@@ -26,11 +26,11 @@ def main():
     parser.add_argument("--end_date")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
+    parser.add_argument("--total", required=False)
     parser.add_argument("--name", required=True)
     parser.add_argument("--trade_market", required=True)
-    parser.add_argument("--reason", required=True)
-    parser.add_argument("--period", required=True)
+    parser.add_argument("--reason", required=False)
+    parser.add_argument("--period", required=False)
     args = parser.parse_args()
     params = {}
     if args.ts_code is not None: params["ts_code"] = args.ts_code

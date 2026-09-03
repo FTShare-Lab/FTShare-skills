@@ -54,3 +54,9 @@ GET /api/v1/market/data/economic/china-industrial-added-value
 
 - 返回按月份汇总，格式如「2025年03月份」，列表已按时间倒序，最新月份在前。
 - 同比单位为 %，各数值字段可为 null。
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-industrial-added-value-monthly
+```

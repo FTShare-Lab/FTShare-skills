@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/global-index/daily-kline'
+ENDPOINT = '/api/v1/market/data/global-index/daily-kline'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():
@@ -24,20 +24,20 @@ def main():
     parser.add_argument("--start_date")
     parser.add_argument("--end_date")
     parser.add_argument("--limit")
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--items", required=True)
+    parser.add_argument("--total", required=False)
+    parser.add_argument("--items", required=False)
     parser.add_argument("--name", required=True)
     parser.add_argument("--trade_date", required=True)
-    parser.add_argument("--open", required=True)
-    parser.add_argument("--close", required=True)
-    parser.add_argument("--high", required=True)
-    parser.add_argument("--low", required=True)
-    parser.add_argument("--volume", required=True)
-    parser.add_argument("--amount", required=True)
+    parser.add_argument("--open", required=False)
+    parser.add_argument("--close", required=False)
+    parser.add_argument("--high", required=False)
+    parser.add_argument("--low", required=False)
+    parser.add_argument("--volume", required=False)
+    parser.add_argument("--amount", required=False)
     parser.add_argument("--amplitude", required=True)
-    parser.add_argument("--change_pct", required=True)
-    parser.add_argument("--change_amount", required=True)
-    parser.add_argument("--turnover", required=True)
+    parser.add_argument("--change_pct", required=False)
+    parser.add_argument("--change_amount", required=False)
+    parser.add_argument("--turnover", required=False)
     args = parser.parse_args()
     params = {}
     if args.secid is not None: params["secid"] = args.secid

@@ -23,12 +23,12 @@ def main():
     parser.add_argument("--date")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
+    parser.add_argument("--total", required=False)
     parser.add_argument("--symbol", required=True)
     parser.add_argument("--symbol_name")
-    parser.add_argument("--change_rate", required=True)
-    parser.add_argument("--close", required=True)
-    parser.add_argument("--turnover", required=True)
+    parser.add_argument("--change_rate", required=False)
+    parser.add_argument("--close", required=False)
+    parser.add_argument("--turnover", required=False)
     args = parser.parse_args()
     params = {}
     if args.date is not None: params["date"] = args.date

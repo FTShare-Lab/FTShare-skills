@@ -25,11 +25,11 @@ def main():
     parser.add_argument("--page")
     parser.add_argument("--page_size")
     parser.add_argument("--date", required=True)
-    parser.add_argument("--comp_rate", required=True)
-    parser.add_argument("--center_rate", required=True)
-    parser.add_argument("--micro_rate", required=True)
-    parser.add_argument("--sdb_rate", required=True)
-    parser.add_argument("--long_rate", required=True)
+    parser.add_argument("--comp_rate", required=False)
+    parser.add_argument("--center_rate", required=False)
+    parser.add_argument("--micro_rate", required=False)
+    parser.add_argument("--sdb_rate", required=False)
+    parser.add_argument("--long_rate", required=False)
     args = parser.parse_args()
     params = {}
     if args.start_date is not None: params["start_date"] = args.start_date

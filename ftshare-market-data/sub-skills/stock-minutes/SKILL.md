@@ -5,7 +5,7 @@ description: 股票历史分钟行情。必填 --symbol；可选日期和分页�
 
 # 股票历史分钟行情
 
-外部接口：`GET /api/v3/market/data/stock_minutes`。
+外部接口：`GET /api/v2/market/data/stock_minutes`。
 
 必填 --symbol；可选日期和分页参数。
 
@@ -14,7 +14,7 @@ description: 股票历史分钟行情。必填 --symbol；可选日期和分页�
 通过主目录 `run.py` 调用：
 
 ```bash
-python <RUN_PY> stock-minutes
+python <RUN_PY> stock-minutes --symbol 000001.SZ --since-ts-millis 1787189400000 --until-ts-millis 1787191200000 --limit 5
 ```
 
 接口返回 JSON；HTTP 错误输出到 stderr 并以非零状态退出。

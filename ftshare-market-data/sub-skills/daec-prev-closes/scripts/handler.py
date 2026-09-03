@@ -23,15 +23,11 @@ def main():
     parser.add_argument("--symbol", required=True)
     parser.add_argument("--since", required=True)
     parser.add_argument("--until", required=True)
-    parser.add_argument("--date", required=True)
-    parser.add_argument("--prev_close", required=True)
     args = parser.parse_args()
     params = {}
     if args.symbol is not None: params["symbol"] = args.symbol
     if args.since is not None: params["since"] = args.since
     if args.until is not None: params["until"] = args.until
-    if args.date is not None: params["date"] = args.date
-    if args.prev_close is not None: params["prev_close"] = args.prev_close
     query = ("?" + urllib.parse.urlencode(params)) if params else ""
     request = urllib.request.Request(BASE_URL + ENDPOINT + query, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key, "Content-Type": "application/json", "X-Client-Name": "ft-claw"}, method="GET")
     try:

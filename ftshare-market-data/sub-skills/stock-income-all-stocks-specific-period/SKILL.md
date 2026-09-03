@@ -77,3 +77,9 @@ python scripts/handler.py --year 2025 --report-type q2 --page 1 --page-size 20
 
 - report_type 取值：q1（一季报）、q2（半年报）、q3（三季报）、annual（年报）。
 - 需要全量数据时，按 page 递增请求直到 page > total_pages。
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-income-all-stocks-specific-period --year 2025 --report-type annual --page 1 --page-size 5
+```

@@ -24,3 +24,9 @@ python script/handler.py
 - 返回按月份汇总，格式如「2025年03月份」
 - 数值单位见 `unit`（亿元），同比/环比单位为 %
 - 列表已按时间倒序，最新月份在前
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-fiscal-revenue-monthly
+```

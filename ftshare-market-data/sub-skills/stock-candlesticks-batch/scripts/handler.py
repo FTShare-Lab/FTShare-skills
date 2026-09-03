@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""批量查询多只标的 K 线（GET /api/v1/market/data/stock-candlesticks/batch）"""
+"""批量查询多只标的 K 线（GET /api/v2/market/data/stock-candlesticks/batch）"""
 import argparse
 import json
 import sys
@@ -20,7 +20,7 @@ SAFE_URLOPENER = urllib.request.build_opener()
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
-ENDPOINT = "/api/v1/market/data/stock-candlesticks/batch"
+ENDPOINT = "/api/v2/market/data/stock-candlesticks/batch"
 
 INTERVAL_UNITS = ("Minute", "Day", "Week", "Month", "Year")
 ADJUST_KINDS = ("None", "Forward", "Backward")

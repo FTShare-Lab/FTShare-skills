@@ -5,7 +5,7 @@ description: 查询 A 股研报列表。按 stock-code 查询个股历史，或�
 
 # 研报列表
 
-外部接口：`GET /api/v3/market/data/report/stock-reports`。
+外部接口：`GET /api/v2/market/data/report/stock-reports`。
 
 支持两种模式：
 

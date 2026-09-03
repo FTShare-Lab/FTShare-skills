@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/xueqiu-rank'
+ENDPOINT = '/api/v1/market/data/xueqiu-rank'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():
@@ -27,14 +27,14 @@ def main():
     parser.add_argument("--page_size")
     parser.add_argument("--display_name", required=True)
     parser.add_argument("--metric_name", required=True)
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--items", required=True)
+    parser.add_argument("--total", required=False)
+    parser.add_argument("--items", required=False)
     parser.add_argument("--rank_no", required=True)
-    parser.add_argument("--normalized_symbol", required=True)
+    parser.add_argument("--normalized_symbol", required=False)
     parser.add_argument("--stock_name", required=True)
     parser.add_argument("--metric_value", required=True)
-    parser.add_argument("--latest_price", required=True)
-    parser.add_argument("--raw_symbol", required=True)
+    parser.add_argument("--latest_price", required=False)
+    parser.add_argument("--raw_symbol", required=False)
     args = parser.parse_args()
     params = {}
     if args.rank_group is not None: params["rank_group"] = args.rank_group

@@ -78,3 +78,9 @@ python scripts/handler.py --date 20251231
 - goodwill_impairment_to_net_profit = goodwill_change / net_profit_scale，当分母为 0 或任一项为 null 时返回 null
 - 金额字段均为 Decimal 类型，以字符串形式返回以保持精度
 - trade_board 取值：sh（上交所主板）、sz（深交所主板）、cyb（创业板）、star（科创板）、bj（北交所）、hk（港股）
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-goodwill-impairment --date 20260828
+```

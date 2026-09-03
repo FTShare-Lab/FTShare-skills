@@ -1,63 +1,54 @@
 #!/usr/bin/env python3
-import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
+import argparse
+import json
+import os
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/intraday-auction-volume'
-SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
-def _require_api_key():
+ENDPOINT = "/api/v1/market/data/intraday-auction-volume/symbol"
+
+
+def main():
+    parser = argparse.ArgumentParser(description="查询单标的连续竞价成交量")
+    parser.add_argument("--symbol", required=True)
+    parser.add_argument("--trade-date", dest="trade_date")
+    parser.add_argument("--page", type=int, default=1)
+    parser.add_argument("--page-size", dest="page_size", type=int, default=50)
+    args = parser.parse_args()
+    if args.page < 1 or not 1 <= args.page_size <= 200:
+        parser.error("page 须大于等于 1，page-size 须在 1～200 之间")
     key = os.environ.get("FTSHARE_API_KEY")
     if not key:
-        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr); raise SystemExit(2)
-    return key
-def safe_urlopen(request, timeout=30):
-    url = request.full_url if isinstance(request, urllib.request.Request) else str(request)
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    params = {"symbol": args.symbol, "page": args.page, "page_size": args.page_size}
+    if args.trade_date is not None:
+        params["trade_date"] = args.trade_date
+    url = BASE_URL + ENDPOINT + "?" + urllib.parse.urlencode(params)
     parsed, base = urllib.parse.urlparse(url), urllib.parse.urlparse(BASE_URL)
-    if parsed.scheme != base.scheme or parsed.netloc != base.netloc:
-        print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr); raise SystemExit(1)
-    if not isinstance(request, urllib.request.Request): request = urllib.request.Request(url, method="GET")
-    request.add_unredirected_header("FTSHARE_API_KEY", _require_api_key())
-    request.add_unredirected_header("Content-Type", "application/json")
-    return SAFE_URLOPENER.open(request, timeout=timeout)
-def main():
-    key = _require_api_key(); parser = argparse.ArgumentParser(description='连续竞价成交量')
-    parser.add_argument("--trade_date")
-    parser.add_argument("--page")
-    parser.add_argument("--page_size")
-    parser.add_argument("--page_num", required=True)
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--ts_millis", required=True)
-    parser.add_argument("--overall", required=True)
-    parser.add_argument("--xshg", required=True)
-    parser.add_argument("--xshe", required=True)
-    parser.add_argument("--bjse", required=True)
-    parser.add_argument("--volume", required=True)
-    parser.add_argument("--volume_ratio", required=True)
-    parser.add_argument("--turnover", required=True)
-    parser.add_argument("--turnover_ratio", required=True)
-    args = parser.parse_args()
-    params = {}
-    if args.trade_date is not None: params["trade_date"] = args.trade_date
-    if args.page is not None: params["page"] = args.page
-    if args.page_size is not None: params["page_size"] = args.page_size
-    if args.page_num is not None: params["page_num"] = args.page_num
-    if args.page_size is not None: params["page_size"] = args.page_size
-    if args.total is not None: params["total"] = args.total
-    if args.ts_millis is not None: params["ts_millis"] = args.ts_millis
-    if args.overall is not None: params["overall"] = args.overall
-    if args.xshg is not None: params["xshg"] = args.xshg
-    if args.xshe is not None: params["xshe"] = args.xshe
-    if args.bjse is not None: params["bjse"] = args.bjse
-    if args.volume is not None: params["volume"] = args.volume
-    if args.volume_ratio is not None: params["volume_ratio"] = args.volume_ratio
-    if args.turnover is not None: params["turnover"] = args.turnover
-    if args.turnover_ratio is not None: params["turnover_ratio"] = args.turnover_ratio
-    query = ("?" + urllib.parse.urlencode(params)) if params else ""
-    request = urllib.request.Request(BASE_URL + ENDPOINT + query, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key, "Content-Type": "application/json", "X-Client-Name": "ft-claw"}, method="GET")
+    if (parsed.scheme, parsed.netloc) != (base.scheme, base.netloc):
+        print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
+        raise SystemExit(1)
+    request = urllib.request.Request(
+        url,
+        headers={"FTSHARE_API_KEY": key, "Content-Type": "application/json"},
+        method="GET",
+    )
     try:
-        with safe_urlopen(request) as response: payload = json.loads(response.read().decode())
-        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        with urllib.request.urlopen(request, timeout=30) as response:
+            result = json.loads(response.read().decode())
     except urllib.error.HTTPError as error:
-        print(f"HTTP {error.code}: {error.read().decode()}", file=sys.stderr); raise SystemExit(1)
+        print(f"HTTP {error.code}: {error.read().decode()}", file=sys.stderr)
+        raise SystemExit(1)
     except urllib.error.URLError as error:
-        print(f"请求失败: {error.reason}", file=sys.stderr); raise SystemExit(1)
-if __name__ == "__main__": main()
+        print(f"请求失败: {error.reason}", file=sys.stderr)
+        raise SystemExit(1)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

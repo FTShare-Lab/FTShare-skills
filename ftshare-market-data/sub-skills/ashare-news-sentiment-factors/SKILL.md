@@ -12,5 +12,5 @@ description: 查询指定 A 股的新闻情绪因子。必填 --trade-code；可
 通过主目录 `run.py` 调用：
 
 ```bash
-python <RUN_PY> ashare-news-sentiment-factors
+python <RUN_PY> ashare-news-sentiment-factors --trade-code 600000.SH
 ```

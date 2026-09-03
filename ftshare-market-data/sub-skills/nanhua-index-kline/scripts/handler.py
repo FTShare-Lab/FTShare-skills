@@ -25,16 +25,6 @@ def main():
     parser.add_argument("--end_date")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--open", required=True)
-    parser.add_argument("--high", required=True)
-    parser.add_argument("--low", required=True)
-    parser.add_argument("--close", required=True)
-    parser.add_argument("--pre_close", required=True)
-    parser.add_argument("--change", required=True)
-    parser.add_argument("--pct_chg", required=True)
-    parser.add_argument("--vol", required=True)
-    parser.add_argument("--amount", required=True)
     args = parser.parse_args()
     params = {}
     if args.trade_date is not None: params["trade_date"] = args.trade_date
@@ -42,17 +32,6 @@ def main():
     if args.end_date is not None: params["end_date"] = args.end_date
     if args.page is not None: params["page"] = args.page
     if args.page_size is not None: params["page_size"] = args.page_size
-    if args.total is not None: params["total"] = args.total
-    if args.trade_date is not None: params["trade_date"] = args.trade_date
-    if args.open is not None: params["open"] = args.open
-    if args.high is not None: params["high"] = args.high
-    if args.low is not None: params["low"] = args.low
-    if args.close is not None: params["close"] = args.close
-    if args.pre_close is not None: params["pre_close"] = args.pre_close
-    if args.change is not None: params["change"] = args.change
-    if args.pct_chg is not None: params["pct_chg"] = args.pct_chg
-    if args.vol is not None: params["vol"] = args.vol
-    if args.amount is not None: params["amount"] = args.amount
     query = ("?" + urllib.parse.urlencode(params)) if params else ""
     request = urllib.request.Request(BASE_URL + ENDPOINT + query, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key, "Content-Type": "application/json", "X-Client-Name": "ft-claw"}, method="GET")
     try:

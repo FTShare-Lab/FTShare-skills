@@ -25,9 +25,9 @@ def main():
     parser.add_argument("--end_date", required=True)
     parser.add_argument("--page", required=True)
     parser.add_argument("--page_size", required=True)
-    parser.add_argument("--total", required=True)
+    parser.add_argument("--total", required=False)
     parser.add_argument("--date", required=True)
-    parser.add_argument("--value", required=True)
+    parser.add_argument("--value", required=False)
     args = parser.parse_args()
     params = {}
     if args.symbol is not None: params["symbol"] = args.symbol

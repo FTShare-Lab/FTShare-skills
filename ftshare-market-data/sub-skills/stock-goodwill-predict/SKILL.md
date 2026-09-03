@@ -85,3 +85,9 @@ python scripts/handler.py --date 20251231
 - date 格式为 YYYYMMDD，按年份范围过滤
 - 金额字段均为 Decimal 类型，以字符串形式返回以保持精度
 - 业绩变动上/下限为百分比值（如 10.5 表示 10.5%）
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-goodwill-predict --date 20260828
+```

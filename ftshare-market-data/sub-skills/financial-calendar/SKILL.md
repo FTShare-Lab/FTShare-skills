@@ -69,7 +69,7 @@ description: 按日期范围查询财经日历（market.ft.tech），含华尔�
 通过主目录 `run.py` 调用（必填 `--start-date`、`--end-date`）：
 
 ```bash
-python <RUN_PY> financial-calendar --start-date 2026-05-01 --end-date 2026-05-07
+python <RUN_PY> financial-calendar --start-date 2026-05-01 --end-date 2026-05-03
 ```
 
 `<RUN_PY>` 为主 SKILL.md 同级的 `run.py` 绝对路径。

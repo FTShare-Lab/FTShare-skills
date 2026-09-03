@@ -9,41 +9,16 @@ ftshare-market-data 统一调度入口。
     python run.py stock-list-all-stocks
     python run.py stock-quotes-list --order_by "change_rate desc" --page_no 1 --page_size 30
     python run.py stock-ipos --page 1 --page_size 20
-    python run.py stock-ipos --all
     python run.py block-trades
     python run.py margin-trading-details --page 1 --page_size 20
-    python run.py margin-trading-details --all
     python run.py semantic-search-news --query 人工智能
     python run.py cb-lists
-    python run.py cb-base-data --symbol_code 110070.SH
     python run.py etf-pcfs --date 20260309
-    python run.py etf-pcf-download --filename pcf_159003_20260309.xml --output pcf.xml
     python run.py fund-basicinfo-single-fund --institution-code 000001
-    python run.py fund-cal-return-single-fund-specific-period --institution-code 159619 --cal-type 1Y
-    python run.py fund-nav-single-fund-paginated --institution-code 000001 --page 1 --page-size 50
-    python run.py fund-overview-all-funds-paginated --page 1 --page-size 20
-    python run.py fund-support-symbols-all-funds-paginated --page 1 --page-size 20
-    python run.py get-nth-trade-date --n 5
-    python run.py company-hk --trade_code 00700.HK
     python run.py hk-candlesticks --trade-code 00700.HK --interval-unit day --until-date 2026-03-24 --since-date 2026-03-01 --limit 20
-    python run.py index-description-paginated --page 1 --page-size 20
-    python run.py index-description-download --url-hash <url_hash> --output ./index-desc.pdf
     python run.py index-weight-summary --page 1 --page-size 20
     python run.py index-weight-list --index-code 000300 --page 1 --page-size 20
-    python run.py index-weight-download --url-hash <url_hash> --output ./index-weights.xlsx
-    python run.py eastmoney-stock-valuation --symbol 000001 --page 1 --page_size 10
-    python run.py eastmoney-stock-valuation --symbol 000001 --start_date 2026-06-01 --end_date 2026-06-09
-    python run.py eastmoney-stock-valuation --start_date 2026-06-01 --end_date 2026-06-09 --all
-    python run.py eastmoney-market-valuation --market_code 000300 --page 1 --page_size 10
-    python run.py eastmoney-market-valuation --market_code 000001 --start_date 2026-06-01 --end_date 2026-06-09
-    python run.py eastmoney-market-valuation --start_date 2026-06-01 --end_date 2026-06-09 --all
-    python run.py eastmoney-us-stock-list
-    python run.py eastmoney-us-stock-daily-ohlc --stock_code AAPL --page 1 --page_size 50
-    python run.py eastmoney-us-stock-daily-ohlc --stock_code AAPL --start_date 2026-01-01 --end_date 2026-06-10
-    python run.py eastmoney-us-stock-daily-ohlc --stock_code AAPL --start_date 2026-01-01 --end_date 2026-06-10 --all
-    python run.py eastmoney-us-stock-latest-ohlc --stock_code AAPL --page 1 --page_size 20
-    python run.py eastmoney-us-stock-latest-ohlc --page 1 --page_size 50
-    python run.py eastmoney-us-stock-latest-ohlc --all
+
 """
 import os
 import runpy

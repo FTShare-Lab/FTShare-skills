@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = "/api/v3/market/data/index_minutes"
+ENDPOINT = "/api/v2/market/data/index_minutes"
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 

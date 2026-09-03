@@ -46,7 +46,7 @@ description: 单只指数历史 K 线 GET 接口（market.ft.tech，index-candle
 ## 4. 调用方式
 
 ```bash
-python <RUN_PY> index-candlesticks --symbol 000300.XSHG --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> index-candlesticks --symbol 000300.XSHG --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 5
 python <RUN_PY> index-candlesticks --symbol 399001.XSHE --interval-unit Minute --interval-value 5 --adjust-kind Forward --since-ts-millis 1756700000000 --until-ts-millis 1756791000000
 ```
 

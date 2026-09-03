@@ -31,7 +31,7 @@ def main():
     parser.add_argument("--start_price", required=True)
     parser.add_argument("--end_price", required=True)
     parser.add_argument("--price_change", required=True)
-    parser.add_argument("--change_pct", required=True)
+    parser.add_argument("--change_pct", required=False)
     args = parser.parse_args()
     params = {}
     if args.stock_code is not None: params["stock_code"] = args.stock_code

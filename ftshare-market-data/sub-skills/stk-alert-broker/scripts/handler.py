@@ -25,7 +25,7 @@ def main():
     parser.add_argument("--end_date")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
+    parser.add_argument("--total", required=False)
     parser.add_argument("--name", required=True)
     parser.add_argument("--type", required=True)
     args = parser.parse_args()

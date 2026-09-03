@@ -78,3 +78,9 @@ python scripts/handler.py --date 20251231
 - 金额字段均为 Decimal 类型，以字符串形式返回以保持精度
 - notice_date 大部分常规商誉记录为 null，仅减值相关记录有公告日期
 - trade_board 取值：sh（上交所主板）、sz（深交所主板）、cyb（创业板）、star（科创板）、bj（北交所）、hk（港股）
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-goodwill-detail --date 20260828
+```

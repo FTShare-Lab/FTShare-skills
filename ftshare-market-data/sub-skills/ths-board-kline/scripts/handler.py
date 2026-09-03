@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/ths-board-kline'
+ENDPOINT = '/api/v1/market/data/ths-board-kline'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():

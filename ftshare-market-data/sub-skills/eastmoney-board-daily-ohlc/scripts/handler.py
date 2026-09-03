@@ -38,7 +38,7 @@ def safe_urlopen(req_or_url):
         req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
-ENDPOINT = "/api/v2/market/data/eastmoney-board-daily-ohlc"
+ENDPOINT = "/api/v1/market/data/eastmoney-board-daily-ohlc"
 
 
 def fetch_page(board_code: str, page: int, page_size: int, start_date: str = None, end_date: str = None) -> dict:

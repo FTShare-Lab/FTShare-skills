@@ -12,5 +12,5 @@ description: 查询 ETF 当前交易日实时日 K 线。必填 --symbols，按�
 通过主目录 `run.py` 调用：
 
 ```bash
-python <RUN_PY> etf-realtime-day-kline
+python <RUN_PY> etf-realtime-day-kline --symbols 510300.SH 159915.SZ --symbols 510300.SH 159915.SZ
 ```

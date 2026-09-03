@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v3/market/data/ashare-interactions'
+ENDPOINT = '/api/v2/market/data/ashare-interactions'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():
@@ -29,12 +29,6 @@ def main():
     parser.add_argument("--data_source")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--id", required=True)
-    parser.add_argument("--time_q", required=True)
-    parser.add_argument("--question", required=True)
-    parser.add_argument("--answer", required=True)
-    parser.add_argument("--time_a", required=True)
     args = parser.parse_args()
     params = {}
     if args.start_date is not None: params["start_date"] = args.start_date
@@ -46,17 +40,6 @@ def main():
     if args.data_source is not None: params["data_source"] = args.data_source
     if args.page is not None: params["page"] = args.page
     if args.page_size is not None: params["page_size"] = args.page_size
-    if args.total is not None: params["total"] = args.total
-    if args.trade_code is not None: params["trade_code"] = args.trade_code
-    if args.company_name is not None: params["company_name"] = args.company_name
-    if args.industry_name is not None: params["industry_name"] = args.industry_name
-    if args.industry_code is not None: params["industry_code"] = args.industry_code
-    if args.id is not None: params["id"] = args.id
-    if args.time_q is not None: params["time_q"] = args.time_q
-    if args.question is not None: params["question"] = args.question
-    if args.answer is not None: params["answer"] = args.answer
-    if args.time_a is not None: params["time_a"] = args.time_a
-    if args.data_source is not None: params["data_source"] = args.data_source
     query = ("?" + urllib.parse.urlencode(params)) if params else ""
     request = urllib.request.Request(BASE_URL + ENDPOINT + query, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key, "Content-Type": "application/json", "X-Client-Name": "ft-claw"}, method="GET")
     try:

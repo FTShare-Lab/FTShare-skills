@@ -21,7 +21,7 @@ def safe_urlopen(request, timeout=30):
 def main():
     key = _require_api_key(); parser = argparse.ArgumentParser(description='涨停对外归因报告')
     parser.add_argument("--date", required=True)
-    parser.add_argument("--security_code", required=True)
+    parser.add_argument("--security_code", required=False)
     args = parser.parse_args()
     params = {"date": args.date, "security_code": args.security_code}
     query = ("?" + urllib.parse.urlencode(params)) if params else ""

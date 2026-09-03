@@ -10,7 +10,7 @@ description: 批量获取多只股票/ETF/可转债/指数 K 线 GET 接口（ma
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 批量查询多只标的 K 线（通用） |
-| 外部接口 | `GET /api/v1/market/data/stock-candlesticks/batch` |
+| 外部接口 | `GET /api/v2/market/data/stock-candlesticks/batch` |
 | 请求方式 | GET（query 参数） |
 | 适用场景 | 一次拉取股票 / ETF / 可转债 / 指数等多只标的的分/日/周/月/年 K 线。响应为嵌套数组 `[[symbol, K线数组], ...]`。通用语义，允许不同证券类别混合查询 |
 
@@ -40,7 +40,7 @@ K 线单根字段同 `stock-candlesticks`：open / high / low / close / ts_milli
 ## 4. 调用方式
 
 ```bash
-python <RUN_PY> stock-candlesticks-batch --symbols 600519.SH,000001.SZ --interval-unit Day --until-ts-millis 1756791000000 --limit 2
+python <RUN_PY> stock-candlesticks-batch --symbols 600519.SH,000001.SZ --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 2
 python <RUN_PY> stock-candlesticks-batch --symbols 600519.SH,510300.SH,113027.SH --interval-unit Week --adjust-kind Forward --until-ts-millis 1756791000000 --limit 4
 ```
 

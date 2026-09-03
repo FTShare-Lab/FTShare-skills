@@ -22,39 +22,10 @@ def main():
     key = _require_api_key(); parser = argparse.ArgumentParser(description='涨跌停池')
     parser.add_argument("--limit_type", required=True)
     parser.add_argument("--trade_date")
-    parser.add_argument("--symbol", required=True)
-    parser.add_argument("--ready", required=True)
-    parser.add_argument("--status", required=True)
-    parser.add_argument("--limit_up_price", required=True)
-    parser.add_argument("--limit_down_price", required=True)
-    parser.add_argument("--limit_up_enter", required=True)
-    parser.add_argument("--limit_up_break", required=True)
-    parser.add_argument("--limit_down_enter", required=True)
-    parser.add_argument("--limit_down_break", required=True)
-    parser.add_argument("--first_limit_up_time", required=True)
-    parser.add_argument("--limit_up_break_count", required=True)
-    parser.add_argument("--last_limit_down_time", required=True)
-    parser.add_argument("--limit_down_break_count", required=True)
-    parser.add_argument("--limit_down_seal_value", required=True)
     args = parser.parse_args()
     params = {}
     if args.limit_type is not None: params["limit_type"] = args.limit_type
     if args.trade_date is not None: params["trade_date"] = args.trade_date
-    if args.symbol is not None: params["symbol"] = args.symbol
-    if args.trade_date is not None: params["trade_date"] = args.trade_date
-    if args.ready is not None: params["ready"] = args.ready
-    if args.status is not None: params["status"] = args.status
-    if args.limit_up_price is not None: params["limit_up_price"] = args.limit_up_price
-    if args.limit_down_price is not None: params["limit_down_price"] = args.limit_down_price
-    if args.limit_up_enter is not None: params["limit_up_enter"] = args.limit_up_enter
-    if args.limit_up_break is not None: params["limit_up_break"] = args.limit_up_break
-    if args.limit_down_enter is not None: params["limit_down_enter"] = args.limit_down_enter
-    if args.limit_down_break is not None: params["limit_down_break"] = args.limit_down_break
-    if args.first_limit_up_time is not None: params["first_limit_up_time"] = args.first_limit_up_time
-    if args.limit_up_break_count is not None: params["limit_up_break_count"] = args.limit_up_break_count
-    if args.last_limit_down_time is not None: params["last_limit_down_time"] = args.last_limit_down_time
-    if args.limit_down_break_count is not None: params["limit_down_break_count"] = args.limit_down_break_count
-    if args.limit_down_seal_value is not None: params["limit_down_seal_value"] = args.limit_down_seal_value
     query = ("?" + urllib.parse.urlencode(params)) if params else ""
     request = urllib.request.Request(BASE_URL + ENDPOINT + query, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key, "Content-Type": "application/json", "X-Client-Name": "ft-claw"}, method="GET")
     try:

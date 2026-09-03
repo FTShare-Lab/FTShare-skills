@@ -8,3 +8,9 @@ description: 查询供应链子行业层级展开。接口：GET /api/v3/market/
 接口：GET `/api/v3/market/data/supply-chain/subindustry-subsubindustries`。参数和响应以 `ftshare-doc/api-doc/股票数据/特色数据/供应链子行业层级展开.md` 为准。
 
 请求必须从环境变量 `FTSHARE_API_KEY` 读取凭据，并通过请求头发送 `FTSHARE_API_KEY` 和 `Content-Type: application/json`；缺少凭据时不会发起请求。
+
+## 调用示例
+
+```bash
+python <RUN_PY> supply-chain-subsubindustries --industry_name 银行
+```

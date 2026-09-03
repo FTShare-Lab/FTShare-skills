@@ -24,10 +24,10 @@ def main():
     parser.add_argument("--range")
     parser.add_argument("--days")
     parser.add_argument("--ts_ms")
-    parser.add_argument("--price", required=True)
+    parser.add_argument("--price", required=False)
     parser.add_argument("--avg_price")
-    parser.add_argument("--volume", required=True)
-    parser.add_argument("--turnover", required=True)
+    parser.add_argument("--volume", required=False)
+    parser.add_argument("--turnover", required=False)
     args = parser.parse_args()
     params = {}
     if args.symbol is not None: params["symbol"] = args.symbol

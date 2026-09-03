@@ -12,5 +12,5 @@ description: 查询股票当前交易日实时 1 分钟 K 线。必填 --symbols
 通过主目录 `run.py` 调用：
 
 ```bash
-python <RUN_PY> stock-realtime-minute-kline
+python <RUN_PY> stock-realtime-minute-kline --symbols 600519.SH 000001.SZ --symbols 600519.SH 000001.SZ
 ```

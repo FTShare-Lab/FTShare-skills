@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/ths-stock-daily-flow'
+ENDPOINT = '/api/v1/market/data/ths-stock-daily-flow'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():
@@ -25,15 +25,15 @@ def main():
     parser.add_argument("--name")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
+    parser.add_argument("--total", required=False)
     parser.add_argument("--trade_date", required=True)
-    parser.add_argument("--close_price", required=True)
-    parser.add_argument("--change_pct", required=True)
-    parser.add_argument("--turnover_pct", required=True)
-    parser.add_argument("--inflow", required=True)
-    parser.add_argument("--outflow", required=True)
-    parser.add_argument("--net_amount", required=True)
-    parser.add_argument("--turnover_amount", required=True)
+    parser.add_argument("--close_price", required=False)
+    parser.add_argument("--change_pct", required=False)
+    parser.add_argument("--turnover_pct", required=False)
+    parser.add_argument("--inflow", required=False)
+    parser.add_argument("--outflow", required=False)
+    parser.add_argument("--net_amount", required=False)
+    parser.add_argument("--turnover_amount", required=False)
     args = parser.parse_args()
     params = {}
     if args.start_date is not None: params["start_date"] = args.start_date

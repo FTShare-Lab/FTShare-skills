@@ -45,7 +45,6 @@ git clone https://github.com/ftshare-lab/ftshare-skills.git
 python <RUN_PY> stock-list-all-stocks
 python <RUN_PY> stock-realtime-minute-kline --symbols 600519.SH 000001.SZ
 python <RUN_PY> hk-candlesticks --trade-code 00700.HK --interval-unit day --until-date 2026-03-24
-python <RUN_PY> semantic-search-news --query 人工智能
 ```
 
 `<RUN_PY>` 是本目录下 `run.py` 的绝对路径。当前子 skill 仅对应《FTShare 四档套餐全量接口表》及其活动源文档；已下线、未发布和暂不支持的接口不在范围内。
@@ -69,13 +68,7 @@ python <RUN_PY> semantic-search-news --query 人工智能
 ```bash
 # 示例
 python <RUN_PY> stock-list-all-stocks
-python <RUN_PY> stock-daec-stocks --board all --page 1 --page_size 5 --order_by "change_rate desc"
-python <RUN_PY> stock-realtime-list --board chi-next --page 1 --page_size 5
-python <RUN_PY> stock-intraday-prices --symbol 600000.XSHG --range Today
-python <RUN_PY> stock-intraday-prices --symbol 600000.XSHG --ts_ms 1779931980000
-python <RUN_PY> stock-ohlcs --symbol 600000.XSHG --compat v2 --span DAY1 --limit 5
 python <RUN_PY> stock-ipos --page 1 --page_size 20
-python <RUN_PY> stock-ipos --all
 python <RUN_PY> semantic-search-news --query 人工智能
 python <RUN_PY> etf-pcfs --date 20260309
 python <RUN_PY> index-weight-summary --index-code 000300 --page 1 --page-size 20
@@ -87,7 +80,7 @@ python <RUN_PY> economic-china-cpi-monthly
 所有 `market.ft.tech` handler 默认使用 `https://market.ft.tech/gateway`。认证 key 从环境变量 `FTSHARE_API_KEY` 读取，并作为 `FTSHARE_API_KEY` 请求头发送；同时发送 `Content-Type: application/json`。缺少凭据时 handler 不会发起请求。本地或内网服务可通过环境变量切换 API 地址：
 
 ```bash
-FTSHARE_BASE_URL=http://127.0.0.1:8000/ python <RUN_PY> stock-intraday-prices --symbol 600000.XSHG --ts_ms 1779931980000
+FTSHARE_BASE_URL=http://127.0.0.1:8000/ python <RUN_PY> stock-list-all-stocks
 ```
 
 > `run.py` 内部通过 `__file__` 自定位，无论安装在何处都能正确找到各子 skill 的脚本。
@@ -130,21 +123,21 @@ python run.py stock-ipos --all
 | 域 | 代表子 skill |
 |---|---|
 | **交易日 / 财经日历 / 新闻公告研报** | `get-nth-trade-date`、`trading-calendar`、`financial-calendar`、`semantic-search-news`、`stock-announcements`、`stock-reports` |
-| **A 股行情 / 基础** | `stock-list-all-stocks`、`stock-quotes-list`、`stock-daec-stocks`、`stock-realtime-list`、`stock-ipos`、`stock-ohlcs`、`stock-intraday-prices`、`daec-ohlcs`、`eastmoney-all-board-daily-ohlc`、`block-trades`、`margin-trading-details` |
+| **A 股行情 / 基础** | `stock-list-all-stocks`、`stock-quotes-list`、`stock-ipos`、`eastmoney-all-board-daily-ohlc`、`block-trades`、`margin-trading-details`、`continuous-auction-volume`、`intraday-auction-volume` |
 | **A 股财报 / 业绩** | `stock-income-*`、`stock-balance-*`、`stock-cashflow-*`、`stock-performance-express-*`、`stock-performance-forecast-*` |
-| **A 股股东 / 质押 / 增减持** | `stock-holder-ten`、`stock-holder-ften`、`stock-holder-nums`、`pledge-summary`、`pledge-detail`、`stock-share-chg` |
-| **A 股公司行动** | `shareholder-meeting`、`stock-unlock-by-stock`、`stock-unlock-by-date`、`major-contract-by-date`、`major-contract-by-symbol`、`major-contract-summary` |
+| **A 股股东 / 质押 / 增减持** | `stock-holder-ten`、`stock-holder-ften`、`stock-holder-nums`、`pledge-summary`、`pledge-detail`、`stock-share-chg`、`executive-holdings-changes` |
+| **A 股公司行动** | `shareholder-meeting`、`major-contract-by-date`、`major-contract-by-symbol`、`major-contract-summary` |
 | **A 股估值 / 千股千评 / 热度 / 资金流** | `eastmoney-stock-valuation`、`eastmoney-market-valuation`、`stock-comment-index/score/org-participate/desire/focus`、`stock-rank-xueqiu`、`stock-rank-eastmoney`、`stock-capital-flows` |
 | **A 股涨跌停** | `limit-up-pool`、`limit-up-pool-yesterday`、`limit-down-pool` |
 | **A 股商誉** | `stock-goodwill-detail`、`stock-goodwill-impairment`、`stock-goodwill-industry`、`stock-goodwill-market-overview`、`stock-goodwill-predict` |
 | **可转债** | `cb-lists`、`cb-base-data` |
-| **ETF** | `etf-detail`、`etf-description-all`、`etf-list-paginated`、`etf-ohlcs`、`etf-prices`、`etf-component`、`etf-components-all`、`etf-pre-single`、`etf-pcfs`、`etf-pcf-download`、`etf-adjust-factor`、`etf-minutes`、`etf-realtime-minute-kline`、`etf-realtime-day-kline` |
+| **ETF** | `etf-description-all`、`etf-components-all`、`etf-pre-single`、`etf-pcfs`、`etf-adjust-factor`、`etf-minutes`、`etf-minutes-batch`、`etf-realtime-minute-kline`、`etf-realtime-day-kline` |
 | **基金** | `fund-basicinfo-single-fund`、`fund-cal-return-...`、`fund-nav-single-fund-paginated`、`fund-overview-all-funds-paginated`、`fund-support-symbols-all-funds-paginated` |
-| **指数** | `index-detail`、`index-list-paginated`、`index-ohlcs`、`index-prices`、`index-minutes`、`index-realtime-minute-kline`、`index-realtime-day-kline`、`index-description-all/paginated/download`、`index-weight-summary/list/download` |
+| **指数** | `index-detail`、`index-list-paginated`、`index-ohlcs`、`index-prices`、`index-minutes`、`index-minutes-batch`、`sw-index-history-minutes`、`index-realtime-minute-kline`、`index-realtime-day-kline`、`index-description-all/paginated/download`、`index-weight-summary/list/download` |
 | **板块（东财 / 同花顺）** | `eastmoney-concept-boards`、`eastmoney-board-constituents/daily-ohlc/latest-ohlc`、`10jqk-board-list/kline/all-kline` |
 | **港股** | `company-hk`、`hk-candlesticks`、`northbound`、`southbound`、`eastmoney-hk-index-daily-kline`、`hsi-daily-weight` |
 | **美股** | `eastmoney-us-stock-list/daily-ohlc/latest-ohlc`、`us-basic` |
-| **期货** | `futures-base-data`、`futures-lists`、`futures-kline`、`futures-minutes`、`futures-minutes-batch`、`futures-minutes-realtime`、`futures-limit`、`futures-settle`、`futures-weekly-detail`、`futures-warehouse-receipt`、`futures-eod-price`、`eastmoney-futures-position`、`eastmoney-futures-strange`、`member-build-process`、`member-position-ranking` |
+| **期货** | `futures-base-data`、`futures-lists`、`futures-limit`、`futures-settle`、`futures-weekly-detail`、`futures-warehouse-receipt`、`eastmoney-futures-position`、`eastmoney-futures-strange`、`member-build-process`、`member-position-ranking` |
 | **宏观经济（中国 + 美国）** | `economic-china-gdp/cpi/ppi/pmi/lpr/...-monthly`（15 项）、`economic-us-economic-by-type`（16 类，按 `--type`） |
 
 ## 名称 → 代码映射
@@ -186,7 +179,7 @@ FTSHARE_BASE_URL=http://127.0.0.1:8000/gateway/ python <RUN_PY> stock-list-all-s
 
 - **域名白名单**：使用 `safe_urlopen` 的 handler 会校验请求协议和主机匹配当前基础地址；设置 `FTSHARE_BASE_URL` 后按该地址校验。
 - **子 skill 白名单**：`run.py` 仅允许 `sub-skills/<名称>/scripts/handler.py` 形态的子 skill，防止路径遍历。
-- **下载落盘限制**：含 `--output` 的下载类接口（如 `index-description-download`、`index-weight-download`、`etf-pcf-download`）仅允许写入**当前工作目录**下的路径。
+- **下载落盘限制**：含 `--output` 的下载类接口仅允许写入**当前工作目录**下的路径。
 - **依赖前序接口的参数**：下载类接口的 `url_hash` / `filename` 须先由对应的列表接口取得，勿硬编码。
 
 ## 项目结构

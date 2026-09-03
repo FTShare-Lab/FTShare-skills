@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = '/api/v2/market/data/ths-hot-list'
+ENDPOINT = '/api/v1/market/data/ths-hot-list'
 SAFE_URLOPENER = urllib.request.build_opener()
 _REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 def _require_api_key():
@@ -24,20 +24,12 @@ def main():
     parser.add_argument("--trade_date")
     parser.add_argument("--page")
     parser.add_argument("--page_size")
-    parser.add_argument("--total", required=True)
-    parser.add_argument("--rank", required=True)
-    parser.add_argument("--name", required=True)
-    parser.add_argument("--rise-and-fall", required=True)
     args = parser.parse_args()
     params = {}
     if args.list_type is not None: params["list_type"] = args.list_type
     if args.trade_date is not None: params["trade_date"] = args.trade_date
     if args.page is not None: params["page"] = args.page
     if args.page_size is not None: params["page_size"] = args.page_size
-    if args.total is not None: params["total"] = args.total
-    if args.rank is not None: params["rank"] = args.rank
-    if args.name is not None: params["name"] = args.name
-    if args.rise_and_fall is not None: params["rise_and_fall"] = args.rise_and_fall
     query = ("?" + urllib.parse.urlencode(params)) if params else ""
     request = urllib.request.Request(BASE_URL + ENDPOINT + query, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key, "Content-Type": "application/json", "X-Client-Name": "ft-claw"}, method="GET")
     try:

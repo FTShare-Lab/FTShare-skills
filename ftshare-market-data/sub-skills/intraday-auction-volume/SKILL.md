@@ -1,10 +1,14 @@
 ---
 name: intraday-auction-volume
-description: 查询连续竞价成交量。接口：GET /api/v2/market/data/intraday-auction-volume。所有请求必须设置 FTSHARE_API_KEY。
+description: 查询单只股票连续竞价成交量和成交额占比。用户询问个股分时成交占比时使用。
 ---
 
-# 连续竞价成交量
+# 单标的连续竞价成交量
 
-接口：GET `/api/v2/market/data/intraday-auction-volume`。参数和响应以 `ftshare-doc/api-doc/股票数据/特色数据/连续竞价成交量.md` 为准。
+接口：`GET /api/v1/market/data/intraday-auction-volume/symbol`。必填 `--symbol`；可选 `--trade-date`（YYYYMMDD）、`--page` 和 `--page-size`，每页最多 200 条。
 
-请求必须从环境变量 `FTSHARE_API_KEY` 读取凭据，并通过请求头发送 `FTSHARE_API_KEY` 和 `Content-Type: application/json`；缺少凭据时不会发起请求。
+```bash
+python <RUN_PY> intraday-auction-volume --symbol 600000.SH --page 1 --page-size 50
+```
+
+不传交易日查询当日实时数据，传入历史交易日查询历史分钟数据；响应为 `code/message/data` 分页信封，分钟记录位于 `data.records`。

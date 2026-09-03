@@ -79,5 +79,5 @@ GET /api/v1/market/data/etf-description-all
 ## 7. 数据更新时间与注意事项
 
 - 数据更新时间以接口/数据源为准。
-- 当用户只给 ETF 名称或简称时，建议先调用本接口做名称匹配，拿到唯一 `symbol` 后再调用 `etf-detail`、`etf-ohlcs`、`etf-prices`、`etf-component`、`etf-pre-single`。
+- 当用户只给 ETF 名称或简称时，建议先调用本接口做名称匹配，拿到唯一 `symbol` 后再调用 `etf-detail`、`etf-ohlcs`、`etf-prices`、`etf-components-all`、`etf-pre-single`。
 - 若名称匹配到多个 `symbol`，先让用户确认目标标的，再继续查询指标。

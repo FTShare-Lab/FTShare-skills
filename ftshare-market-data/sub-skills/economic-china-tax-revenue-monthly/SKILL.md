@@ -59,3 +59,9 @@ GET /api/v1/market/data/economic/china-tax-revenue
 
 - 返回按月份汇总，格式如「2025年05月」，列表已按时间倒序，最新月份在前。
 - 金额单位为亿元，同比/环比单位为 %，各数值字段可为 null。
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-tax-revenue-monthly
+```

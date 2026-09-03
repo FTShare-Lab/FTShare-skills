@@ -21,12 +21,12 @@ def safe_urlopen(request, timeout=30):
 def main():
     key = _require_api_key(); parser = argparse.ArgumentParser(description='市场行情快照')
     parser.add_argument("--scope")
-    parser.add_argument("--status", required=True)
-    parser.add_argument("--change_rate", required=True)
-    parser.add_argument("--volume", required=True)
-    parser.add_argument("--turnover", required=True)
+    parser.add_argument("--status", required=False)
+    parser.add_argument("--change_rate", required=False)
+    parser.add_argument("--volume", required=False)
+    parser.add_argument("--turnover", required=False)
     parser.add_argument("--prev_turnover")
-    parser.add_argument("--distribution", required=True)
+    parser.add_argument("--distribution", required=False)
     args = parser.parse_args()
     params = {}
     if args.scope is not None: params["scope"] = args.scope

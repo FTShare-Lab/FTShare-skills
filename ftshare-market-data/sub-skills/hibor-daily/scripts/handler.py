@@ -25,7 +25,7 @@ def main():
     parser.add_argument("--page")
     parser.add_argument("--page_size")
     parser.add_argument("--trade_date", required=True)
-    parser.add_argument("--on_rate", required=True)
+    parser.add_argument("--on_rate", required=False)
     args = parser.parse_args()
     params = {}
     if args.start_date is not None: params["start_date"] = args.start_date

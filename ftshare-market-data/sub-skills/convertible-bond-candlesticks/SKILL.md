@@ -44,7 +44,7 @@ description: 单只可转债历史 K 线 GET 接口（market.ft.tech，convertib
 ## 4. 调用方式
 
 ```bash
-python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 5
 python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Minute --interval-value 5 --adjust-kind Forward --since-ts-millis 1756700000000 --until-ts-millis 1756791000000
 ```
 

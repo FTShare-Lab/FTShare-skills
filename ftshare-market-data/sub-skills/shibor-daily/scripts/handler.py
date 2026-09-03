@@ -25,7 +25,7 @@ def main():
     parser.add_argument("--page")
     parser.add_argument("--page_size")
     parser.add_argument("--trade_date", required=True)
-    parser.add_argument("--on_rate", required=True)
+    parser.add_argument("--on_rate", required=False)
     parser.add_argument("--w1", required=True)
     parser.add_argument("--w2", required=True)
     parser.add_argument("--m1", required=True)

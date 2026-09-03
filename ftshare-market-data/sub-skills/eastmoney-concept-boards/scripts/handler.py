@@ -37,7 +37,7 @@ def safe_urlopen(req_or_url):
         req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
-ENDPOINT = "/api/v2/market/data/eastmoney-concept-boards"
+ENDPOINT = "/api/v1/market/data/eastmoney-concept-boards"
 
 
 def fetch():

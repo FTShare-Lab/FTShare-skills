@@ -54,3 +54,9 @@ GET /api/v1/market/data/economic/china-lpr
 
 - 返回按报价日期（通常为每月 20 日左右）汇总，列表已按时间倒序，最新日期在前。
 - `lpr_1y`、`lpr_5y` 单位为 %，可为 null。
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-lpr-monthly
+```

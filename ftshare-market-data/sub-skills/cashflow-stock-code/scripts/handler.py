@@ -20,7 +20,7 @@ def safe_urlopen(request, timeout=30):
     return SAFE_URLOPENER.open(request, timeout=timeout)
 def main():
     key = _require_api_key(); parser = argparse.ArgumentParser(description='现金流支持股票代码')
-    parser.add_argument("--items", required=True)
+    parser.add_argument("--items", required=False)
     parser.add_argument("--stock_code", required=True)
     parser.add_argument("--stock_name", required=True)
     args = parser.parse_args()
