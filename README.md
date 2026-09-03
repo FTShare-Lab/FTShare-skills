@@ -1,228 +1,213 @@
-# FTShare Skill
+<p align="center">
+  <img src="./docs/assets/readme/hero.svg" width="100%" alt="FTShare Skill，让 Agent 理解问题并调用金融数据与特色因子">
+</p>
 
-[中文](README.md) | [English](README_EN.md)
+<p align="center">
+  <a href="README.md">中文</a> · <a href="README_EN.md">English</a>
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+<p align="center">
+  <img src="https://img.shields.io/badge/Agent_Skill-ftshare--market--data-3563E9" alt="ftshare-market-data Agent Skill">
+  <img src="https://img.shields.io/badge/python-3.9%2B-111827" alt="Python 3.9 or later">
+  <img src="https://img.shields.io/badge/dependencies-standard_library_only-667085" alt="Python standard library only">
+  <a href="https://github.com/FTShare-Lab/FTShare-skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-667085" alt="MIT License"></a>
+</p>
 
-`FTShare Skill` 是 FTShare 面向 AI Agent 提供的金融数据 Skill 接入方式。它把 FTShare 的行情、财务、宏观、指数、ETF、基金、板块与新闻数据封装成 Agent 可以识别和调用的 Skill。
+<p align="center">
+  <strong>让金融数据成为 AI 的可靠上下文。</strong><br>
+  FTShare Skill 让 Agent 根据自然语言问题，自动选择并调用基础金融数据与 FTShare 特色因子接口。
+</p>
 
-将本仓库中的 `ftshare-market-data` 加载到 Claude Code、Codex、OpenClaw 等 Agent 运行时后，用户可以直接用自然语言提出数据问题。Agent 会根据 `SKILL.md` 选择对应接口，通过统一入口执行请求，并读取结构化 JSON 结果。
+<p align="center">
+  <a href="https://ftai.chat/?tab=ft-share"><strong>FTShare 正式版</strong></a>
+  · <a href="https://ftai.chat/me/profile">获取 API Key</a>
+  · <a href="#三步开始使用">快速开始</a>
+  · <a href="https://github.com/FTShare-Lab/FTShare-skill/issues">问题反馈</a>
+</p>
 
-## FTShare 的三种接入方式
+> [!IMPORTANT]
+> 本仓库提供一个可安装的父 Skill：`ftshare-market-data`。Agent 读取父 Skill 后，再从内部子 Skill 中选择对应数据接口，通过 `run.py` 执行请求并读取 JSON。所有请求都需要环境变量 `FTSHARE_API_KEY`。
 
-FTShare 目前提供 SDK、MCP 和 Skill 三种接入方式。三种方式连接同一套 FTShare 金融数据能力，适合不同的使用环境。
+## FTShare Skill 是什么
 
-| 接入方式 | 适合场景 | 调用方式 | 项目地址 |
-|---|---|---|---|
-| Python SDK | Python 程序、数据分析、量化研究 | 在代码中调用，返回 pandas `DataFrame` | [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk) |
-| MCP | 支持 MCP 的 AI 客户端与 Agent | 将 FTShare 配置为标准 MCP 工具 | [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP) |
-| Skill | Claude Code、Codex、OpenClaw 等 Agent 运行时 | 加载 `SKILL.md`，由 Agent 自动选择并执行 | 本仓库 |
+FTShare Skill 是 FTShare 面向 Agent 运行时提供的金融数据接入方式。将 `ftshare-market-data` 加载到 Claude Code、Codex、OpenClaw 等运行时后，用户可以直接用自然语言提出数据问题，由 Agent 完成接口选择、参数组织和结果读取。
 
-需要在 Python 项目里稳定编程时使用 SDK。需要给 AI 客户端提供标准工具接口时使用 MCP。需要让 Agent 直接理解数据能力并完成自然语言到接口调用的路由时使用 Skill。
+<p align="center">
+  <a href="https://ftai.chat/?tab=ft-share"><img src="./docs/assets/readme/ftshare-website.png" width="100%" alt="FTShare 正式版官网横幅，展示金融数据服务及 SDK、MCP、Skills 接入入口"></a>
+</p>
 
-## 当前 Skill
+<p align="center"><sub>FTShare 正式版公开页面。点击图片进入产品与套餐页面。</sub></p>
 
-本仓库当前提供一个可安装的父 Skill。
+## 三步开始使用
 
-```text
-ftshare-market-data
+### 1. 获取仓库
+
+```bash
+git clone https://github.com/FTShare-Lab/FTShare-skill.git
+cd FTShare-skill
 ```
 
-它包含 164 个金融数据接口子路由，每个路由对应一项 FTShare 数据能力。Agent 运行时只需加载父 Skill，再由父 Skill 根据用户问题选择内部路由。
+### 2. 配置 API Key
+
+登录 [FTShare 账号中心](https://ftai.chat/me/profile) 获取 API Key，然后设置环境变量：
+
+```bash
+export FTSHARE_API_KEY="YOUR_FTSHARE_API_KEY"
+```
+
+请勿将真实 API Key 提交到 Git 仓库、Issue、日志或公开截图。
+
+### 3. 加载父 Skill
+
+将完整的 `ftshare-market-data` 目录放入 Agent 运行时的 Skill 目录。
+
+| 运行时 | Skill 目录示例 |
+|---|---|
+| Claude Code 项目级 | `.claude/skills/ftshare-market-data/` |
+| Claude Code 用户级 | `~/.claude/skills/ftshare-market-data/` |
+| Codex 用户级 | `~/.codex/skills/ftshare-market-data/` |
+| OpenClaw 等其他运行时 | 以对应运行时的 Skill 文档为准 |
+
+目录中必须完整保留 `SKILL.md`、`run.py` 和 `sub-skills/`。
+
+## 用特色因子完成第一次调用
+
+加载后可以直接向 Agent 提问：
+
+```text
+使用 FTShare 查询贵州茅台 2026 年 8 月的新闻情绪因子
+```
+
+Agent 会路由到真实子 Skill：
+
+```text
+ashare-news-sentiment-factors
+```
+
+对应的真实命令为：
+
+```bash
+python3 ftshare-market-data/run.py ashare-news-sentiment-factors \
+  --trade-code 600519.SH \
+  --start-date 20260801 \
+  --end-date 20260831 \
+  --page 1 \
+  --page-size 5
+```
+
+> [!NOTE]
+> 该接口要求股票代码包含交易所后缀，例如 `600519.SH`。特色因子属于研究数据，具体可用范围取决于账号套餐，不构成股票推荐或未来收益判断。
+
+## 路由是怎样工作的
 
 ```text
 用户提出金融数据问题
     ↓
 Agent 读取 ftshare-market-data/SKILL.md
     ↓
-选择对应的子 Skill
+选择 sub-skills/<名称>/SKILL.md
     ↓
-通过 run.py 调用 FTShare 数据服务
+run.py 校验并执行 scripts/handler.py
     ↓
-读取 JSON 并组织回答
+FTShare 数据服务返回 JSON
+    ↓
+Agent 整理并回答
 ```
 
-## 数据能力
-
-当前 164 个接口子路由覆盖以下方向。
-
-| 数据域 | 代表能力 |
-|---|---|
-| A 股 | 股票列表、实时行情、分时、K 线、IPO、大宗交易、融资融券、资金流、涨跌停 |
-| 财务与公司数据 | 利润表、资产负债表、现金流量表、业绩预告、业绩快报、股东、质押、解禁、重大合同 |
-| ETF 与基金 | ETF 行情、成份、PCF、基金净值、收益、持仓、费率、风险等级 |
-| 指数与板块 | 指数行情、指数权重、指数说明、东财板块、同花顺板块 |
-| 港股与美股 | 行情、K 线、估值、公司资料、财务报表、恒生指数权重 |
-| 可转债与期货 | 可转债资料与 K 线、期货行情与持仓排名 |
-| 宏观与资讯 | 中国宏观数据、美国经济指标、财经日历、新闻语义搜索 |
-
-完整接口、参数和字段说明见 [ftshare-market-data/README.md](ftshare-market-data/README.md) 与各子 Skill 的 `SKILL.md`。
-
-## 安装
-
-先克隆仓库。
-
-```bash
-git clone https://github.com/FTShare-Lab/FTShare-skills.git
-cd FTShare-skills
-```
-
-将 `ftshare-market-data` 目录放入 Agent 运行时的 Skill 路径。
-
-Claude Code 可以使用项目级或用户级目录。
-
-```text
-.claude/skills/ftshare-market-data/
-~/.claude/skills/ftshare-market-data/
-```
-
-Codex 可以放入用户级 Skill 目录。
-
-```text
-~/.codex/skills/ftshare-market-data/
-```
-
-其他 Agent 运行时请将完整的 `ftshare-market-data` 目录放入对应 Skill 目录，并确保运行时能够读取其中的 `SKILL.md`、`run.py` 和 `sub-skills/`。
-
-运行时只需要 Python 3.9 或更高版本。子 Skill 使用 Python 标准库，不需要安装 `pandas` 或 `requests`。
-
-## 快速开始
-
-Skill 加载完成后，可以直接向 Agent 提问。
-
-| 用户问题 | Agent 执行的命令 |
-|---|---|
-| 列出所有 A 股股票 | `python3 <RUN_PY> stock-list-all-stocks` |
-| 查询全市场实时行情并按涨跌幅排序 | `python3 <RUN_PY> stock-daec-stocks --board all --page 1 --page_size 5 --order_by "change_rate desc"` |
-| 查询浦发银行当日分时 | `python3 <RUN_PY> stock-intraday-prices --symbol 600000.XSHG --range Today` |
-| 查询平安银行最近一个月的日 K 线 | `python3 <RUN_PY> stock-ohlcs --symbol 000001.SZ --since 20260501` |
-| 查询沪深 300 成份权重 | `python3 <RUN_PY> index-weight-list --index-code 000300` |
-| 查询美国最新非农数据 | `python3 <RUN_PY> economic-us-economic-by-type --type nonfarm-payroll` |
-
-`<RUN_PY>` 表示 `ftshare-market-data/run.py` 的绝对路径。
-
-也可以在终端直接调用。
-
-```bash
-python3 ftshare-market-data/run.py stock-list-all-stocks
-python3 ftshare-market-data/run.py limit-up-pool
-python3 ftshare-market-data/run.py semantic-search-news --query 人工智能
-python3 ftshare-market-data/run.py company-hk --trade_code 00700.HK
-```
-
-不传子 Skill 名称时，`run.py` 会列出当前所有可用路由。
+查看当前可用路由：
 
 ```bash
 python3 ftshare-market-data/run.py
 ```
 
-## 调用规则
+## FTShare 的三种接入方式
 
-`run.py` 是统一调度入口。标准调用格式如下。
+| 接入方式 | 适合场景 | 调用形态 | 仓库 |
+|---|---|---|---|
+| **Python SDK** | Python 程序、数据分析、量化研究 | pandas `DataFrame`、Python rows、原始 JSON | [FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk) |
+| **MCP** | 支持 MCP 的 AI 客户端与 Agent | 标准 MCP 工具、结构化结果 | [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP) |
+| **Skill** | Claude Code、Codex、OpenClaw 等 Agent 运行时 | 自然语言到数据接口的路由 | 当前仓库 |
 
-```bash
-python3 <RUN_PY> <子 Skill 名称> [参数...]
-```
+三种方式连接同一套 FTShare 金融数据服务。需要在 Python 程序中稳定调用时使用 SDK；需要标准 MCP 工具时使用 MCP；需要 Agent 根据问题自动选择数据接口时使用 Skill。
 
-每个子 Skill 都有独立的说明文件。
+## 数据能力
+
+当前 Skill 覆盖现货、宏观经济、大模型语料、股票、美股、公募基金、ETF、港股、期货、债券和指数等数据域。
+
+股票数据进一步包含资金流向、财务、参考、行情、打板专题、两融及转融通、特色数据和基础数据；特色数据包括 A 股新闻情绪因子、A 股相关性 Top-K、K 线形态标注、供应链关系和信号最新快照等。
+
+最新接口、参数、字段、数据权限和更新状态，请查看：
+
+**[FTShare 最新数据接口文档](https://market.ft.tech/gateway/doc/p/zdxwn9lx)**
+
+仓库内每个子 Skill 的说明位于：
 
 ```text
 ftshare-market-data/sub-skills/<子 Skill 名称>/SKILL.md
 ```
 
-说明文件包含适用场景、参数、接口路径、返回结构和调用示例。Agent 应先读取对应说明，再执行命令。
+## 输出与错误
 
-## 返回结果
-
-子 Skill 会向标准输出打印 JSON，Agent 可以直接读取并转换成表格、摘要或后续分析所需的结构。
-
-手工调用时可以配合 `jq` 查看结果。
-
-```bash
-python3 ftshare-market-data/run.py stock-list-all-stocks | jq '.items[0:3]'
-```
-
-分页接口通常支持单页查询。部分接口也支持 `--all` 自动翻页。
-
-```bash
-python3 ftshare-market-data/run.py stock-ipos --page 1 --page_size 20
-python3 ftshare-market-data/run.py stock-ipos --all
-```
-
-## 名称与代码映射
-
-部分接口只接受证券代码。用户只提供名称时，Agent 应先调用列表或描述接口完成映射。
-
-| 查询目标 | 代码格式 | 推荐映射接口 |
-|---|---|---|
-| 指数 | `000300` 或 `000300.XSHG` | `index-description-paginated`、`index-description-all` |
-| ETF | `510050.XSHG` | `etf-description-all`、`etf-list-paginated` |
-| 基金 | 6 位基金代码 | `fund-overview-all-funds-paginated` |
-| 可转债 | `110070.SH` | `cb-lists` |
-| 港股 | `00700.HK` | `company-hk`、`hk-view` |
-
-## Base URL
-
-`market.ft.tech` 接口默认使用以下基础地址。
-
-```text
-https://market.ft.tech/gateway
-```
-
-本地或内网服务可以通过 `FTSHARE_BASE_URL` 切换。
-
-```bash
-FTSHARE_BASE_URL=http://127.0.0.1:8000/ python3 ftshare-market-data/run.py stock-list-all-stocks
-```
-
-少数接口使用其他 FTShare 服务地址，具体情况以对应子 Skill 的说明为准。
+- 成功响应以格式化 JSON 输出到 stdout。
+- HTTP、网络、认证和参数诊断输出到 stderr。
+- 请求失败时使用非零退出状态。
+- 分页和返回字段以对应子 Skill 的 `SKILL.md` 与最新官方文档为准。
+- 缺少 `FTSHARE_API_KEY` 时，handler 不会发起网络请求。
 
 ## 安全约束
 
-- `run.py` 只允许执行 `sub-skills/` 中存在的 handler，避免通过名称访问其他路径。
-- 使用域名校验的 handler 会检查请求协议与主机是否符合当前基础地址。
-- 下载类接口会校验输出参数。建议只输出到当前工作目录，不要使用符号链接路径。
-- Skill 不应读取或输出用户的密钥、令牌与其他敏感信息。
+- `run.py` 只执行 `sub-skills/<名称>/scripts/handler.py` 形式的已发现子 Skill。
+- handler 会校验请求协议和主机与当前 Base URL 一致。
+- 默认 Base URL 为 `https://market.ft.tech/gateway`。
+- 如需切换本地或内网环境，可使用 `FTSHARE_BASE_URL`；不要把内部服务地址写入公开文档。
+- 下载类接口只允许输出到当前工作目录及其子目录。
+- Skill 不应读取、记录或输出用户的 API Key。
 
 ## 项目结构
 
 ```text
-FTShare-skills/
-  README.md
-  README_EN.md
-  CONTRIBUTING.md
-  SECURITY.md
-  ftshare-market-data/
-    README.md
-    SKILL.md
-    run.py
-    test_handlers_contract.py
-    sub-skills/
-      <子 Skill 名称>/
-        SKILL.md
-        scripts/
-          handler.py
+FTShare-skill/
+├── README.md
+├── README_EN.md
+└── ftshare-market-data/
+    ├── SKILL.md
+    ├── README.md
+    ├── run.py
+    ├── test_handlers_contract.py
+    └── sub-skills/
+        └── <子 Skill 名称>/
+            ├── SKILL.md
+            └── scripts/handler.py
 ```
 
 ## 参与贡献
 
-欢迎提交新的金融数据子 Skill、接口适配、测试、文档改进和使用示例。贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
+欢迎提交新的金融数据子 Skill、接口适配、测试和文档改进。贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，安全问题请按照 [SECURITY.md](SECURITY.md) 反馈。
 
-普通问题和功能建议可以通过 GitHub Issue 提交。安全问题请按照 [SECURITY.md](SECURITY.md) 中的方式反馈。
+## 社区与反馈
 
-## 社区交流
+- 使用问题与功能建议：[GitHub Issues](https://github.com/FTShare-Lab/FTShare-skill/issues)
+- 正式产品与套餐：[FTShare](https://ftai.chat/?tab=ft-share)
+- API Key 管理：[账号中心](https://ftai.chat/me/profile)
+- Python SDK：[FTShare-python-sdk](https://github.com/FTShare-Lab/FTShare-python-sdk)
+- MCP 接入：[FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP)
 
-欢迎加入 FTShare 社区交流群，讨论 Skill 接入、金融数据接口、Agent 使用和项目贡献。
+### 加入 FTShare 社区交流群
 
-<img src="docs/assets/wechat-group-20260909.png" alt="FTShare 微信交流群" width="320" />
+欢迎加入 FTShare 社区交流群，讨论 Skill 接入、特色因子、金融数据接口和 Agent 使用。
 
-> 群内仅讨论 FTShare、金融数据、Skill 和 Agent 相关内容。Bug 与功能需求建议优先提交 GitHub Issue。
+<p align="center">
+  <img src="./docs/assets/wechat-group-20260909.png" width="320" alt="FTShare 微信社区交流群二维码，有效期至 2026 年 9 月 9 日">
+</p>
+
+> 群内用于交流使用经验和补充问题信息；Bug、功能需求和 Skill 文档问题建议优先通过 GitHub Issues 提交。
 
 **二维码有效期至 2026 年 9 月 9 日。** 如二维码失效，请在 Issues 中留言。
 
 ## License
 
-本项目代码采用 MIT License，详见 [LICENSE](LICENSE)。
+本仓库代码与 Skill 实现采用 MIT License。开源许可证不自动包含 FTShare 托管数据服务的访问额度、数据授权、再分发权或商业数据使用权。
 
-MIT License 适用于本仓库中的代码与 Skill 实现。FTShare 数据服务的访问额度、权限和商业用途以对应服务条款为准。
+---
+
+<p align="center"><strong>FTShare</strong> · 让金融数据成为 AI 的可靠上下文</p>
