@@ -10,7 +10,7 @@ description: 按港股代码查询日/月/季/年 K 线（market.ft.tech，hksha
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询港股 K 线 |
-| 外部接口 | `/api/v1/market/data/hk/hk-candlesticks` |
+| 外部接口 | `/api/v2/market/data/hk/hk-candlesticks` |
 | 请求方式 | GET |
 | 适用场景 | 按港股代码查询日/月/季/年 K 线（来源：`hkshareeodprices`）；请求与响应中的代码均为 **5 位数字 + `.HK`**，服务端会转换为库内 4 位 Wind 代码查询 |
 
@@ -77,5 +77,5 @@ python scripts/handler.py --trade-code 00700.HK --interval-unit day --until-date
 ## 5. 请求示例
 
 ```
-GET /api/v1/market/data/hk/hk-candlesticks?trade_code=00700.HK&interval_unit=day&since_date=2026-03-01&until_date=2026-03-24&limit=20
+GET /api/v2/market/data/hk/hk-candlesticks?trade_code=00700.HK&interval_unit=day&since_date=2026-03-01&until_date=2026-03-24&limit=20
 ```

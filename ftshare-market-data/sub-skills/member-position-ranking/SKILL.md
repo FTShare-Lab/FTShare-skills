@@ -10,7 +10,7 @@ description: 查询指定交易日/交易所/合约/方向的期货会员持仓�
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询期货会员持仓排名 |
-| 外部接口 | GET /api/v1/market/data/member-position-ranking |
+| 外部接口 | GET /api/v2/market/data/member-position-ranking |
 | 请求方式 | GET |
 | 适用场景 | 查询指定交易日、交易所、合约及方向的期货会员持仓排名 |
 

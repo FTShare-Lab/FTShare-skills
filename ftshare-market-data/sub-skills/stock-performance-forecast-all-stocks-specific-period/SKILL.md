@@ -28,3 +28,9 @@ python scripts/handler.py --year 2024 --report-type annual --page 1 --page-size 
 
 - `report-type` 取值：`q1`（一季报）、`q2`（中报）、`q3`（三季报）、`annual`（年报）
 - 需要全量数据时，循环请求直到 `page > total_pages`
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-performance-forecast-all-stocks-specific-period --year 2025 --report-type annual --page 1 --page-size 5
+```

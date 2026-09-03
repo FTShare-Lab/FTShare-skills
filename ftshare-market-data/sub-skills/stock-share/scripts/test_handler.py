@@ -22,7 +22,7 @@ class TestFetch(unittest.TestCase):
         mock_open.return_value.__enter__.return_value.read.return_value = b"[]"
         handler.fetch("000001.SZ", "20260716")
         url = mock_open.call_args[0][0]
-        self.assertIn("/api/v1/market/data/share/get-stock-share", url)
+        self.assertIn("/api/v2/market/data/share/get-stock-share", url)
         self.assertIn("stock_code=000001.SZ", url)
         self.assertIn("date=20260716", url)
 

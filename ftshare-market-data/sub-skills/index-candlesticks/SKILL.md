@@ -1,6 +1,6 @@
 ---
 name: index-candlesticks
-description: 单只指数历史 K 线 POST 接口（market.ft.tech，index-candlesticks）。用户问某只指数的分/日/周/月/年 K 线、开高低收点位、前/后复权、分钟级 K 线、沪深300/上证指数日 K 时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
+description: 单只指数历史 K 线 GET 接口（market.ft.tech，index-candlesticks）。用户问某只指数的分/日/周/月/年 K 线、开高低收点位、前/后复权、分钟级 K 线、沪深300/上证指数日 K 时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
 ---
 
 # 指数 K 线 - 查询单只指数 K 线（index-candlesticks）
@@ -10,11 +10,11 @@ description: 单只指数历史 K 线 POST 接口（market.ft.tech，index-candl
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询单只指数历史 K 线 |
-| 外部接口 | `POST /api/v1/market/data/index-candlesticks` |
-| 请求方式 | POST（JSON body） |
+| 外部接口 | `GET /api/v1/market/data/index-candlesticks` |
+| 请求方式 | GET（query 参数） |
 | 适用场景 | 获取指定指数的分/日/周/月/年 K 线，含开高低收点位、成交量、成交额；支持前复权 / 后复权 / 不复权。仅接受指数标的 |
 
-> 与 `index-ohlcs`（`GET daec/history/ohlcs`，YYYYMMDD 日期区间，仅日/周/月）区别：本接口走 POST + JSON body，参数为毫秒时间戳，支持分钟级与年 K。
+> 与 `index-ohlcs`（`GET daec/history/ohlcs`，YYYYMMDD 日期区间，仅日/周/月）区别：本接口走 GET query 参数，参数为毫秒时间戳，支持分钟级与年 K。
 
 ## 2. 请求参数
 
@@ -46,7 +46,7 @@ description: 单只指数历史 K 线 POST 接口（market.ft.tech，index-candl
 ## 4. 调用方式
 
 ```bash
-python <RUN_PY> index-candlesticks --symbol 000300.XSHG --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> index-candlesticks --symbol 000300.XSHG --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 5
 python <RUN_PY> index-candlesticks --symbol 399001.XSHE --interval-unit Minute --interval-value 5 --adjust-kind Forward --since-ts-millis 1756700000000 --until-ts-millis 1756791000000
 ```
 

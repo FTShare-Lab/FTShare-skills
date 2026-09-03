@@ -56,3 +56,9 @@ GET /api/v1/market/data/economic/china-ppi
 
 - 返回按月份汇总，格式如「2025年03月份」，列表已按时间倒序，最新月份在前。
 - PPI 为指数（基期 100），同比/环比单位为 %，各字段可为 null。
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-ppi-monthly
+```

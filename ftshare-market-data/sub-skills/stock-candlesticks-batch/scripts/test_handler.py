@@ -19,15 +19,14 @@ class TestFetch(unittest.TestCase):
         spec.loader.exec_module(handler)
 
     @patch.object(handler, "safe_urlopen")
-    def test_post_to_stock_batch_endpoint(self, mock_open):
+    def test_get_to_stock_batch_endpoint(self, mock_open):
         mock_open.return_value.__enter__.return_value.read.return_value = b"[]"
         handler.fetch(["600519.SH", "000001.SZ"], "Day", 1, "None",
                       None, 1756791000000, 2)
         req = mock_open.call_args[0][0]
-        self.assertEqual(req.get_method(), "POST")
-        self.assertIn("/api/v1/market/data/stock-candlesticks/batch", req.full_url)
-        body = json.loads(req.data.decode())
-        self.assertEqual(body["symbols"], ["600519.SH", "000001.SZ"])
+        self.assertEqual(req.get_method(), "GET")
+        self.assertIn("/api/v2/market/data/stock-candlesticks/batch", req.full_url)
+        self.assertIsNone(req.data)
         self.assertEqual(req.headers.get("X-client-name"), "ft-claw")
 
     @patch.object(handler, "safe_urlopen")

@@ -13,9 +13,18 @@ from typing import Optional
 import os
 SAFE_URLOPENER = urllib.request.build_opener()
 
+def _require_api_key():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
+    return key
+
+
 BEIJING_TZ = timezone(timedelta(hours=8))
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 ENDPOINT = "/api/v1/market/data/daec/stocks"
 
 def safe_urlopen(req_or_url):
@@ -27,6 +36,13 @@ def safe_urlopen(req_or_url):
     if parsed.scheme != urllib.parse.urlparse(BASE_URL).scheme or parsed.netloc != urllib.parse.urlparse(BASE_URL).netloc:
         print(f"Invalid URL for safe_urlopen: {url}", file=sys.stderr)
         sys.exit(1)
+    if not isinstance(req_or_url, urllib.request.Request):
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
+    if isinstance(req_or_url, urllib.request.Request):
+        for key, value in _REQUEST_HEADERS.items():
+            req_or_url.add_unredirected_header(key, value)
+    else:
+        req_or_url = urllib.request.Request(str(req_or_url), headers=_REQUEST_HEADERS, method="GET")
     return SAFE_URLOPENER.open(req_or_url)
 
 HEADERS = {
@@ -73,7 +89,7 @@ def _get_json(url: str):
     """发起 GET 并解析 JSON。daec 大响应偶发截断，对传输类错误重试。"""
     last_exc = None
     for attempt in range(MAX_RETRIES):
-        req = urllib.request.Request(url, headers=HEADERS)
+        req = urllib.request.Request(url, headers={**HEADERS, **_REQUEST_HEADERS})
         try:
             with safe_urlopen(req) as resp:
                 return json.loads(resp.read().decode())
@@ -89,7 +105,8 @@ def _get_json(url: str):
     sys.exit(1)
 
 
-def fetch(order_by=None, ob=None, filter_=None, masks=None, page_size=None, page_no=None, filter_index=None):
+def fetch(
+order_by=None, ob=None, filter_=None, masks=None, page_size=None, page_no=None, filter_index=None):
     params = build_params(order_by, ob, filter_, masks, page_size, page_no, filter_index)
     url = f"{BASE_URL}{ENDPOINT}?{urllib.parse.urlencode(params)}"
     data = _get_json(url)
@@ -101,6 +118,7 @@ def fetch(order_by=None, ob=None, filter_=None, masks=None, page_size=None, page
 
 
 def main():
+    _require_api_key()
     parser = argparse.ArgumentParser(description="查询 A 股行情列表（分页，daec）")
     parser.add_argument("--order_by", required=True, help='排序规则，如 change_rate desc')
     parser.add_argument("--page_no", type=int, required=True, help="页码，从 1 开始")

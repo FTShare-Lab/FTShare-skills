@@ -1,6 +1,6 @@
 ---
 name: etf-candlesticks
-description: 单只 ETF 历史 K 线 POST 接口（market.ft.tech，etf-candlesticks）。用户问某只 ETF 的分/日/周/月/年 K 线、开高低收、前/后复权、分钟级 K 线、5 分钟/日 K/周 K/月 K/年 K 时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
+description: 单只 ETF 历史 K 线 GET 接口（market.ft.tech，etf-candlesticks）。用户问某只 ETF 的分/日/周/月/年 K 线、开高低收、前/后复权、分钟级 K 线、5 分钟/日 K/周 K/月 K/年 K 时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
 ---
 
 # ETF K 线 - 查询单只 ETF 历史 K 线（etf-candlesticks）
@@ -10,11 +10,11 @@ description: 单只 ETF 历史 K 线 POST 接口（market.ft.tech，etf-candlest
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询单只 ETF 历史 K 线 |
-| 外部接口 | `POST /api/v1/market/data/etf-candlesticks` |
-| 请求方式 | POST（JSON body） |
+| 外部接口 | `GET /api/v1/market/data/etf-candlesticks` |
+| 请求方式 | GET（query 参数） |
 | 适用场景 | 获取指定 ETF 的分/日/周/月/年 K 线，含开高低收、成交量、成交额；支持前复权 / 后复权 / 不复权。仅接受 ETF 标的 |
 
-> 与 `etf-ohlcs`（`GET daec/history/ohlcs`，YYYYMMDD 日期区间，仅日/周/月）区别：本接口走 POST + JSON body，参数为毫秒时间戳，支持分钟级与年 K，是统一的 candlesticks 契约。
+> 与 `etf-ohlcs`（`GET daec/history/ohlcs`，YYYYMMDD 日期区间，仅日/周/月）区别：本接口走 GET query 参数，参数为毫秒时间戳，支持分钟级与年 K，是统一的 candlesticks 契约。
 
 ## 2. 请求参数
 
@@ -48,7 +48,7 @@ description: 单只 ETF 历史 K 线 POST 接口（market.ft.tech，etf-candlest
 通过主目录 `run.py` 调用：
 
 ```bash
-python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 5
 python <RUN_PY> etf-candlesticks --symbol 510300.XSHG --interval-unit Minute --interval-value 5 --adjust-kind Forward --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 100
 ```
 

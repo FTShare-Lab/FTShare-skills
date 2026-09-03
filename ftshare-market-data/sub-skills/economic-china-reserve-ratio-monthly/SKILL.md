@@ -54,3 +54,9 @@ GET /api/v1/market/data/economic/china-reserve-ratio
 
 - 返回按日期汇总（通常为调准日所在月份），格式如「2025年12月」，列表已按时间倒序，最新在前。
 - 准备金率单位为 %，各数值字段可为 null；仅当央行调整时会有新记录。
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-china-reserve-ratio-monthly
+```

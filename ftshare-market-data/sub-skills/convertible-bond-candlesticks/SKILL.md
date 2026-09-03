@@ -1,6 +1,6 @@
 ---
 name: convertible-bond-candlesticks
-description: 单只可转债历史 K 线 POST 接口（market.ft.tech，convertible-bond-candlesticks）。用户问某只可转债的分/日/周/月/年 K 线、开高低收、前/后复权、分钟级 K 线时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
+description: 单只可转债历史 K 线 GET 接口（market.ft.tech，convertible-bond-candlesticks）。用户问某只可转债的分/日/周/月/年 K 线、开高低收、前/后复权、分钟级 K 线时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
 ---
 
 # 可转债 K 线 - 查询单只可转债 K 线（convertible-bond-candlesticks）
@@ -10,8 +10,8 @@ description: 单只可转债历史 K 线 POST 接口（market.ft.tech，converti
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询单只可转债历史 K 线 |
-| 外部接口 | `POST /api/v1/market/data/convertible-bond-candlesticks` |
-| 请求方式 | POST（JSON body） |
+| 外部接口 | `GET /api/v1/market/data/convertible-bond-candlesticks` |
+| 请求方式 | GET（query 参数） |
 | 适用场景 | 获取指定可转债的分/日/周/月/年 K 线，含开高低收、成交量、成交额；支持前复权 / 后复权 / 不复权。仅接受可转债标的 |
 
 ## 2. 请求参数
@@ -44,7 +44,7 @@ description: 单只可转债历史 K 线 POST 接口（market.ft.tech，converti
 ## 4. 调用方式
 
 ```bash
-python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Day --until-ts-millis 1756791000000 --limit 5
+python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Day --since-ts-millis 1756700000000 --until-ts-millis 1756791000000 --limit 5
 python <RUN_PY> convertible-bond-candlesticks --symbol 113027.SH --interval-unit Minute --interval-value 5 --adjust-kind Forward --since-ts-millis 1756700000000 --until-ts-millis 1756791000000
 ```
 

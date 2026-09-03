@@ -10,7 +10,7 @@ description: 语义搜索新闻（market.ft.tech）。用户问语义搜新闻�
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 语义搜索新闻 |
-| 外部接口 | `GET /api/v1/market/data/semantic-search-news` |
+| 外部接口 | `GET /api/v3/market/data/semantic-search-news` |
 | 请求方式 | GET |
 | 适用场景 | 根据搜索文字进行语义搜索，返回相关新闻列表；数据仅支持查询**当年**、**最近半个月**内的新闻 |
 

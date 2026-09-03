@@ -10,7 +10,7 @@ description: 根据公告 ID 查询单条报告公告的摘要、标题、证券
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询报告公告摘要 |
-| 外部接口 | GET /api/v1/market/data/report-announcements/summary |
+| 外部接口 | GET /api/v2/market/data/report-announcements/summary |
 | 请求方式 | GET |
 | 适用场景 | 根据公告 ID 查询单条报告公告的摘要、标题、证券信息和处理状态 |
 

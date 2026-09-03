@@ -29,7 +29,7 @@ description: 分页查询东方财富全部板块历史日线 OHLC（板块代�
 
 ```bash
 # 取一页
-python <RUN_PY> eastmoney-all-board-daily-ohlc --start_date 20251127 --end_date 2025-11-28 --page 1 --page_size 1
+python <RUN_PY> eastmoney-all-board-daily-ohlc --start_date 2025-11-27 --end_date 2025-11-28 --page 1 --page_size 1
 # 翻全量
 python <RUN_PY> eastmoney-all-board-daily-ohlc --all
 ```

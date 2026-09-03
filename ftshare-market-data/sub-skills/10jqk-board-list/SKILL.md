@@ -22,7 +22,7 @@ description: Get all THS board list (同花顺板块列表). Use when user asks 
 
 ## 3. 响应说明
 
-| 字段名 | 类型 | 说明 |
+成功响应外层为 `code`、`message`、`data`，板块列表位于 `data` 数组中。
 |--------|------|------|
 | module | string | 板块类型：`concept`（概念）/ `csrc`（证监会）/ `industry`（行业）/ `region`（地域） |
 | code | string | 板块代码 |
@@ -30,11 +30,15 @@ description: Get all THS board list (同花顺板块列表). Use when user asks 
 
 示例响应：
 ```json
-[
-  { "module": "concept", "code": "885311", "name": "5G概念" },
-  { "module": "industry", "code": "881001", "name": "银行" },
-  { "module": "region", "code": "883001", "name": "北京" }
-]
+{
+  "code": 200,
+  "message": "success",
+  "data": [
+    { "module": "concept", "code": "885311", "name": "5G概念" },
+    { "module": "industry", "code": "881001", "name": "银行" },
+    { "module": "region", "code": "883001", "name": "北京" }
+  ]
+}
 ```
 
 ## 4. 用法

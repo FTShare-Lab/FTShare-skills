@@ -8,6 +8,7 @@ import urllib.request
 import os
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 
 
 def main():
@@ -17,9 +18,12 @@ def main():
     parser.add_argument("--search", default=None, help="搜索板块名称或代码")
     args = parser.parse_args()
 
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
     url = f"{BASE_URL}/api/v1/market/data/ths-board-list"
-    req = urllib.request.Request(url, method="GET")
-    req.add_header("Accept", "application/json")
+    req = urllib.request.Request(url, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key}, method="GET")
 
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -32,17 +36,19 @@ def main():
         print(f"Connection error: {e.reason}", file=sys.stderr)
         sys.exit(1)
 
-    if not isinstance(data, list):
+    if not isinstance(data, dict) or not isinstance(data.get("data"), list):
         print("Unexpected response format", file=sys.stderr)
         sys.exit(1)
 
+    rows = data["data"]
     if args.module:
-        data = [b for b in data if b.get("module") == args.module]
+        rows = [b for b in rows if b.get("module") == args.module]
 
     if args.search:
         q = args.search.lower()
-        data = [b for b in data if q in b.get("name", "").lower() or q in b.get("code", "")]
+        rows = [b for b in rows if q in b.get("name", "").lower() or q in b.get("code", "")]
 
+    data["data"] = rows
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 

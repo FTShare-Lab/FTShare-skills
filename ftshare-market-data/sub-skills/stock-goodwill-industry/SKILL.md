@@ -66,3 +66,9 @@ python scripts/handler.py --date 20251231
 
 - date 格式为 YYYYMMDD，按年份范围过滤
 - 金额字段均为 Decimal 类型，以字符串形式返回以保持精度
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-goodwill-industry --date 20260828
+```

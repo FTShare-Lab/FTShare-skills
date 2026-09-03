@@ -1,6 +1,6 @@
 ---
 name: index-description-paginated
-description: 分页查询 A 股相关指数描述列表（market.ft.tech）。含指数代码（纯 6 位 index_code）、名称、简介及用于下载描述文件的 url_hash。用户问指数描述分页、指数简介列表、指数 url_hash、某只指数简介、有哪些指数描述、下载指数描述前先查列表时使用。也可作为**名称→代码映射源**：用户给出中文指数名称时，先调本接口按 index_name 匹配，取 index_code 供 index-weight-list 等接口使用。下游：取到 url_hash 后可调 index-description-download 下载 PDF。
+description: 含指数代码（纯 6 位 `index_code`）、名称、简介及其他描述字段。用户问指数描述分页、指数简介列表、某只指数简介、有哪些指数描述时使用。也可作为名称→代码映射源：用户给出中文指数名称时，先调本接口按 `index_name` 匹配，取 `index_code` 供 `index-weight-list` 等接口使用。
 ---
 
 # 分页查询指数描述列表（index-description-paginated）
@@ -66,11 +66,7 @@ python scripts/handler.py --page 1 --page-size 20
 
 ## 5. 链路说明
 
-本接口为**描述链第 1 步**。取到 `url_hash` 后，可调用 `index-description-download --url-hash <url_hash>` 下载对应指数描述 PDF。
-
-### 名称→代码映射
-
-本接口返回的 `index_code`（纯 6 位，如 `000300`）与 `index_name` 可用于**名称到代码映射**。当其他接口（如 `index-weight-list`）需要 `index_code` 但用户只给了中文名称时：
+本接口返回的 `index_code`（纯 6 位，如 `000300`）与 `index_name` 可用于名称到代码映射。当其他接口（如 `index-weight-list`）需要 `index_code` 但用户只给了中文名称时：
 
 1. 调用本接口 `--page 1 --page-size 100`
 2. 在 `index_descriptions` 中按 `index_name` 模糊搜索用户给出的名称

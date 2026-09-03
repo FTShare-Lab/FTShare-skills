@@ -10,7 +10,7 @@ description: 查询单个期货会员在指定合约/日期区间的持仓变化
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询期货会员建仓过程 |
-| 外部接口 | GET /api/v1/market/data/member-build-process |
+| 外部接口 | GET /api/v2/market/data/member-build-process |
 | 请求方式 | GET |
 | 适用场景 | 查询单个期货会员在指定合约和日期区间内的持仓变化，并结合合约行情估算每日及累计盈亏 |
 

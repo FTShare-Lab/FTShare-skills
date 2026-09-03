@@ -10,7 +10,7 @@ import os
 SAFE_URLOPENER = urllib.request.build_opener()
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
-ENDPOINT = "/api/v1/market/data/member-position-ranking"
+ENDPOINT = "/api/v2/market/data/member-position-ranking"
 
 
 def safe_urlopen(req_or_url):

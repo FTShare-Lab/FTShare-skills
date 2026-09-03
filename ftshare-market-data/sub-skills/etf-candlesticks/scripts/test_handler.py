@@ -46,11 +46,10 @@ class TestFetch(unittest.TestCase):
         mock_open.return_value.__enter__.return_value.read.return_value = b"[]"
         handler.fetch("510300.XSHG", "Day", 1, "None", None, 1756791000000, 5)
         req = mock_open.call_args[0][0]
-        self.assertEqual(req.get_method(), "POST")
+        self.assertEqual(req.get_method(), "GET")
         self.assertIn("/api/v1/market/data/etf-candlesticks", req.full_url)
-        body = json.loads(req.data.decode())
-        self.assertEqual(body["symbol"], "510300.XSHG")
-        self.assertEqual(body["limit"], 5)
+        self.assertIsNone(req.data)
+        self.assertEqual(req.full_url.split("?", 1)[1], "symbol=510300.XSHG&interval_unit=Day&until_ts_millis=1756791000000&limit=5")
         self.assertEqual(req.headers.get("X-client-name"), "ft-claw")
         self.assertEqual(req.headers.get("Content-type"), "application/json")
 

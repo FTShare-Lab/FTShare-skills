@@ -66,3 +66,9 @@ python scripts/handler.py
 - 无需参数，返回全量历史数据，按 report_date 倒序
 - 金额字段均为 Decimal 类型，以字符串形式返回以保持精度
 - goodwill_impairment 对应数据库 goodwill_change 列（response 层做了语义化重命名）
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-goodwill-market-overview
+```

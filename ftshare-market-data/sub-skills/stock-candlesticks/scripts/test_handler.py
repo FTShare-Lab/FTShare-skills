@@ -38,14 +38,14 @@ class TestFetch(unittest.TestCase):
         spec.loader.exec_module(handler)
 
     @patch.object(handler, "safe_urlopen")
-    def test_post_to_stock_endpoint(self, mock_open):
+    def test_get_to_stock_endpoint(self, mock_open):
         mock_open.return_value.__enter__.return_value.read.return_value = b"[]"
         handler.fetch("600519.SH", "Day", 1, "None", None, 1756791000000, 5)
         req = mock_open.call_args[0][0]
-        self.assertEqual(req.get_method(), "POST")
+        self.assertEqual(req.get_method(), "GET")
         self.assertIn("/api/v1/market/data/stock-candlesticks", req.full_url)
-        body = json.loads(req.data.decode())
-        self.assertEqual(body["symbol"], "600519.SH")
+        self.assertIsNone(req.data)
+        self.assertIn("symbol=600519.SH", req.full_url)
         self.assertEqual(req.headers.get("X-client-name"), "ft-claw")
 
     @patch.object(handler, "safe_urlopen")

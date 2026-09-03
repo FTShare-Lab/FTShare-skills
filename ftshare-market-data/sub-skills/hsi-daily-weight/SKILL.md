@@ -85,3 +85,9 @@ python scripts/handler.py --start_date 20260501 --end_date 20260529 --index_slug
 - `trade_date` 与 `start_date`/`end_date` 互斥；`start_date`/`end_date` 必须成对且 `start_date ≤ end_date`。
 - 排序：`trade_date DESC, index_slug, stock_code`。
 - HTTP 恒为 200，业务错误通过 `code`/`message` 携带（非 0 为错误）；数据来自 MySQL 实时读取，高频调用建议用 `trade_date` 精确过滤。
+
+## 调用示例
+
+```bash
+python <RUN_PY> hsi-daily-weight --trade_date 20260821 --index_slug HSI --page 1
+```

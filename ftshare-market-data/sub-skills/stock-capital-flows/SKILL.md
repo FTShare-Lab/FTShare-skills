@@ -84,3 +84,9 @@ python scripts/handler.py --symbol 601138.SH
 - 仅返回 A 股股票（不含 ETF、指数等）；列表按 `net_inflow_main` 降序排列。
 - 本接口响应带短期缓存（失败重试策略约 5 秒），相同 query 在缓存有效期内可能返回相同结果。
 - `--all` 自动翻页拉取全量；全市场约 5000+ 条，按需使用以免响应过大。
+
+## 调用示例
+
+```bash
+python <RUN_PY> stock-capital-flows --symbol 600519.SH --page 1 --page-size 5
+```

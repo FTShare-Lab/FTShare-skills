@@ -87,3 +87,9 @@ GET /api/v1/market/data/economic/us-economic?type=ism-manufacturing
 
 - 必须传入合法的 `type`，否则接口可能报错或返回空。
 - 数组按时间倒序，最新在前；数值单位见各 type 说明。
+
+## 调用示例
+
+```bash
+python <RUN_PY> economic-us-economic-by-type --type cpi-yoy
+```

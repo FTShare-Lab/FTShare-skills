@@ -1,6 +1,6 @@
 ---
 name: stock-candlesticks
-description: 单只股票/ETF/指数/可转债历史 K 线 POST 接口（market.ft.tech，stock-candlesticks）。用户问某只标的的分/日/周/月/年 K 线、开高低收、前/后复权、分钟级 K 线、5 分钟/日 K/周 K/月 K/年 K 时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
+description: 单只股票/ETF/指数/可转债历史 K 线 GET 接口（market.ft.tech，stock-candlesticks）。用户问某只标的的分/日/周/月/年 K 线、开高低收、前/后复权、分钟级 K 线、5 分钟/日 K/周 K/月 K/年 K 时使用。必填 --symbol、--interval-unit、--until-ts-millis；可选 --interval-value、--adjust-kind、--since-ts-millis、--limit。
 ---
 
 # 股票 K 线 - 查询单只标的 K 线（stock-candlesticks）
@@ -10,11 +10,11 @@ description: 单只股票/ETF/指数/可转债历史 K 线 POST 接口（market.
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询单只标的 K 线（通用） |
-| 外部接口 | `POST /api/v1/market/data/stock-candlesticks` |
-| 请求方式 | POST（JSON body） |
+| 外部接口 | `GET /api/v1/market/data/stock-candlesticks` |
+| 请求方式 | GET（query 参数） |
 | 适用场景 | 获取股票 / ETF / 指数 / 可转债等标的的分/日/周/月/年 K 线，含开高低收、成交量、成交额；支持前复权 / 后复权 / 不复权。通用语义，不做证券类别校验 |
 
-> 与 `stock-ohlcs`（`GET daec/history/ohlcs`，YYYYMMDD 日期区间，仅日/周/月）区别：本接口走 POST + JSON body，参数为毫秒时间戳，支持分钟级与年 K，是统一的 candlesticks 契约，且允许股票/ETF/指数/可转债等不同类别标的。
+> 本接口统一使用毫秒时间戳和 GET query 参数，支持分钟级与年 K，并允许股票、ETF、指数、可转债等不同类别标的。
 
 ## 2. 请求参数
 

@@ -9,6 +9,7 @@ import os
 SAFE_URLOPENER = urllib.request.build_opener()
 
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
+_REQUEST_HEADERS = {"FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"], "Content-Type": "application/json"} if os.environ.get("FTSHARE_API_KEY") else {}
 
 def safe_urlopen(req_or_url):
     if isinstance(req_or_url, urllib.request.Request):
@@ -24,8 +25,12 @@ def safe_urlopen(req_or_url):
 
 
 def main():
+    key = os.environ.get("FTSHARE_API_KEY")
+    if not key:
+        print("FTSHARE_API_KEY environment variable is required", file=sys.stderr)
+        raise SystemExit(2)
     url = BASE_URL + "/api/v1/market/data/cb/cb-lists"
-    req = urllib.request.Request(url, method="GET")
+    req = urllib.request.Request(url, headers={**_REQUEST_HEADERS, "FTSHARE_API_KEY": key}, method="GET")
 
     try:
         with safe_urlopen(req) as resp:

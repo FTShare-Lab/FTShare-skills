@@ -100,4 +100,4 @@ python <RUN_PY> report-announcement-list --date 20260714 --all
 - `date` 为必填，支持 YYYYMMDD 或 YYYY-MM-DD。
 - `page_size` 最大 200。
 - 取得 `announcement_id` 后可调用 `report-announcement-summary` 查询公告摘要。
-- 两个路径（`/report-announcements/list` 与 `/report-announcement/list`）是同一处理逻辑的兼容入口。
+- 两个路径（`/report-announcements/list` 与 `/report-announcement/list`）均为 v1 兼容入口。

@@ -10,7 +10,7 @@ description: 查询全部 ETF 基础信息（market.ft.tech）。用户问 ETF �
 | 项目 | 说明 |
 |------|------|
 | 接口名称 | 查询全部ETF基础信息 |
-| 外部接口 | `/api/v1/market/data/etf-description-all` |
+| 外部接口 | `/api/v2/market/data/etf-description-all` |
 | 请求方式 | GET |
 | 适用场景 | 获取 ETF 列表（代码与名称）及部分基础属性信息，用于列表展示、筛选与检索 |
 
@@ -79,5 +79,5 @@ GET /api/v1/market/data/etf-description-all
 ## 7. 数据更新时间与注意事项
 
 - 数据更新时间以接口/数据源为准。
-- 当用户只给 ETF 名称或简称时，建议先调用本接口做名称匹配，拿到唯一 `symbol` 后再调用 `etf-detail`、`etf-ohlcs`、`etf-prices`、`etf-component`、`etf-pre-single`。
+- 当用户只给 ETF 名称或简称时，建议先调用本接口做名称匹配，拿到唯一 `symbol` 后再调用 `etf-detail`、`etf-ohlcs`、`etf-prices`、`etf-components-all`、`etf-pre-single`。
 - 若名称匹配到多个 `symbol`，先让用户确认目标标的，再继续查询指标。
