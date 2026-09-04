@@ -36,6 +36,10 @@ python <RUN_PY> stock-announcements --stock-code 600000 --page 1 --page-size 20
 python <RUN_PY> stock-candlesticks-batch --symbols 600519.SH,510300.SH --interval-unit Day --until-ts-millis 1787191200000
 python <RUN_PY> etf-minutes-batch --symbols 510300.SH,159915.SZ --since-ts-millis 1787189400000 --until-ts-millis 1787191200000
 python <RUN_PY> executive-holdings-changes --stock-code 600519 --page 1 --page-size 20
+python <RUN_PY> eastmoney-shareholder-changes --symbol 股东增持 --page 1 --page-size 20
+python <RUN_PY> ashare-code-change --trade-code 001872.SZ
+python <RUN_PY> ashare-status-change --trade-code 600848.SH --change-type 上市
+python <RUN_PY> nth-trade-date --n 5
 python <RUN_PY> continuous-auction-volume --trade-date 20260620 --page 1 --page-size 50
 python <RUN_PY> semantic-search-news --query 人工智能
 ```

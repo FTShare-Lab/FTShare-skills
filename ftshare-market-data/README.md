@@ -74,6 +74,10 @@ python <RUN_PY> etf-pcfs --date 20260309
 python <RUN_PY> index-weight-summary --index-code 000300 --page 1 --page-size 20
 python <RUN_PY> index-weight-list --index-code 000300 --page 1 --page-size 20
 python <RUN_PY> hk-candlesticks --trade-code 00700.HK --interval-unit day --until-date 2026-03-24
+python <RUN_PY> nth-trade-date --n 5
+python <RUN_PY> eastmoney-shareholder-changes --symbol 股东增持 --page 1 --page-size 20
+python <RUN_PY> ashare-code-change --trade-code 001872.SZ
+python <RUN_PY> ashare-status-change --trade-code 600848.SH --change-type 上市
 python <RUN_PY> economic-china-cpi-monthly
 ```
 
@@ -122,11 +126,11 @@ python run.py stock-ipos --all
 
 | 域 | 代表子 skill |
 |---|---|
-| **交易日 / 财经日历 / 新闻公告研报** | `get-nth-trade-date`、`trading-calendar`、`financial-calendar`、`semantic-search-news`、`stock-announcements`、`stock-reports` |
+| **交易日 / 财经日历 / 新闻公告研报** | `nth-trade-date`、`trading-calendar`、`financial-calendar`、`semantic-search-news`、`stock-announcements`、`stock-reports` |
 | **A 股行情 / 基础** | `stock-list-all-stocks`、`stock-description-all`、`stock-quotes-list`、`stock-ipos`、`eastmoney-all-board-daily-ohlc`、`block-trades`、`margin-trading-details`、`continuous-auction-volume`、`intraday-auction-volume` |
 | **A 股财报 / 业绩** | `stock-income-*`、`stock-balance-*`、`stock-cashflow-*`、`stock-performance-express-*`、`stock-performance-forecast-*` |
-| **A 股股东 / 质押 / 增减持** | `stock-holder-ten`、`stock-holder-ften`、`stock-holder-nums`、`pledge-summary`、`pledge-detail`、`stock-share-chg`、`executive-holdings-changes` |
-| **A 股公司行动** | `shareholder-meeting`、`major-contract-by-date`、`major-contract-by-symbol`、`major-contract-summary` |
+| **A 股股东 / 质押 / 增减持** | `stock-holder-ten`、`stock-holder-ften`、`stock-holder-nums`、`pledge-summary`、`pledge-detail`、`stock-share-chg`、`executive-holdings-changes`、`eastmoney-shareholder-changes` |
+| **A 股公司行动 / 代码与状态** | `shareholder-meeting`、`major-contract-by-date`、`major-contract-by-symbol`、`major-contract-summary`、`ashare-code-change`、`ashare-status-change` |
 | **A 股估值 / 千股千评 / 热度 / 资金流** | `eastmoney-stock-valuation`、`eastmoney-market-valuation`、`stock-comment-index/score/org-participate/desire/focus`、`stock-rank-xueqiu`、`stock-rank-eastmoney`、`stock-capital-flows` |
 | **A 股涨跌停** | `limit-up-pool`、`limit-up-pool-yesterday`、`limit-down-pool` |
 | **A 股商誉** | `stock-goodwill-detail`、`stock-goodwill-impairment`、`stock-goodwill-industry`、`stock-goodwill-market-overview`、`stock-goodwill-predict` |
@@ -136,7 +140,7 @@ python run.py stock-ipos --all
 | **指数** | `index-detail`、`index-list-paginated`、`index-ohlcs`、`index-prices`、`index-minutes`、`index-minutes-batch`、`sw-index-history-minutes`、`index-realtime-minute-kline`、`index-realtime-day-kline`、`index-description-all/paginated/download`、`index-weight-summary/list/download` |
 | **板块（东财 / 同花顺）** | `eastmoney-concept-boards`、`eastmoney-board-constituents/daily-ohlc/latest-ohlc`、`10jqk-board-list/kline/all-kline` |
 | **港股** | `company-hk`、`hk-candlesticks`、`northbound`、`southbound`、`eastmoney-hk-index-daily-kline`、`hsi-daily-weight` |
-| **美股** | `eastmoney-us-stock-list/daily-ohlc/latest-ohlc`、`us-basic` |
+| **美股** | `eastmoney-us-stock-list`、`eastmoney-us-stock-daily-ohlc`、`us-basic` |
 | **期货** | `futures-base-data`、`futures-lists`、`futures-limit`、`futures-settle`、`futures-weekly-detail`、`futures-warehouse-receipt`、`eastmoney-futures-position`、`eastmoney-futures-strange`、`member-build-process`、`member-position-ranking` |
 | **宏观经济（中国 + 美国）** | `economic-china-gdp/cpi/ppi/pmi/lpr/...-monthly`（15 项）、`economic-us-economic-by-type`（16 类，按 `--type`） |
 
