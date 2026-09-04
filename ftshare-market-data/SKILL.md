@@ -26,7 +26,7 @@ python <RUN_PY> <子skill名> [参数...]
 ## 常用示例
 
 ```bash
-python <RUN_PY> stock-list-all-stocks
+python <RUN_PY> stock-description-all --symbol-id 600000.SH --page 1 --page-size 1
 python <RUN_PY> stock-realtime-minute-kline --symbols 600519.SH 000001.SZ
 python <RUN_PY> stock-minutes --symbol 600519.SH --since-ts-millis 1787189400000 --until-ts-millis 1787191200000
 python <RUN_PY> etf-realtime-day-kline --symbols 510300.SH
