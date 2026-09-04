@@ -10,6 +10,10 @@ import urllib.request
 BASE_URL = os.environ.get("FTSHARE_BASE_URL", "https://market.ft.tech/gateway").rstrip("/")
 ENDPOINT = "/api/v1/market/data/stock-description"
 SAFE_URLOPENER = urllib.request.build_opener()
+_REQUEST_HEADERS = {
+    "FTSHARE_API_KEY": os.environ["FTSHARE_API_KEY"],
+    "Content-Type": "application/json",
+} if os.environ.get("FTSHARE_API_KEY") else {"Content-Type": "application/json"}
 
 
 def _require_api_key():
@@ -29,7 +33,9 @@ def safe_urlopen(request, timeout=30):
         raise SystemExit(1)
     if not isinstance(request, urllib.request.Request):
         request = urllib.request.Request(url, method="GET")
-    request.add_unredirected_header("FTSHARE_API_KEY", _require_api_key())
+    _require_api_key()
+    for key, value in _REQUEST_HEADERS.items():
+        request.add_unredirected_header(key, value)
     return SAFE_URLOPENER.open(request, timeout=timeout)
 
 
